@@ -30,9 +30,10 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,GameActivity.class);
-                startActivity(intent);
+//                startActivity(intent);
             }
         });
+
         /*button1.setOnClickListener((v)->{
             Toast.makeText(getApplicationContext(),"按了按钮",Toast.LENGTH_LONG).show();
         });*/
