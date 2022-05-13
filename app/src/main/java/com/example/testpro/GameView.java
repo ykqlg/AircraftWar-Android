@@ -26,6 +26,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mSurfaceHolder = this.getHolder();
         mSurfaceHolder.addCallback(this);//发生回调时处理
         this.setFocusable(true);
+
+//        loading_img();//加载图片
+
     }
     public void draw () {
         //通过SurfaceHolder对象的lockCanvans()方法，我们可以获取当前的Canvas绘图对象
@@ -36,39 +39,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-screenHeight,mPaint);
         canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
         backGroundTop+=1;
-//        if(backGroundTop == screenHeight){
-//            this.backGroundTop = 0;
-//        }
+        if(backGroundTop == screenHeight){
+            this.backGroundTop = 0;
+        }
 
-        if (count < 100) {
-            count++;
-        } else {
-            count = 0;
-        }
-        mPaint.setAntiAlias(true);
-        mPaint.setColor(Color.BLUE);
-        //绘制一个全屏大小的矩形
-        canvas.drawRect(0, 0, screenWidth, screenHeight, mPaint);
-        switch (count % 4) {
-            case 0:
-                mPaint.setColor(Color.BLUE);
-                break;
-            case 1:
-                mPaint.setColor(Color.GREEN);
-                break;
-            case 2:
-                mPaint.setColor(Color.RED);
-                break;
-            case 3:
-                mPaint.setColor(Color.YELLOW);
-                break;
-            default:
-                mPaint.setColor(Color.WHITE);
-        }
-        //绘制一个圆形
-        canvas.drawCircle(x, y, 50, mPaint);
-        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
-        mSurfaceHolder.unlockCanvasAndPost(canvas);
+//        if (count < 100) {
+//            count++;
+//        } else {
+//            count = 0;
+//        }
+//        mPaint.setAntiAlias(true);
+//        mPaint.setColor(Color.BLUE);
+//        //绘制一个全屏大小的矩形
+//        canvas.drawRect(0, 0, screenWidth, screenHeight, mPaint);
+//        switch (count % 4) {
+//            case 0:
+//                mPaint.setColor(Color.BLUE);
+//                break;
+//            case 1:
+//                mPaint.setColor(Color.GREEN);
+//                break;
+//            case 2:
+//                mPaint.setColor(Color.RED);
+//                break;
+//            case 3:
+//                mPaint.setColor(Color.YELLOW);
+//                break;
+//            default:
+//                mPaint.setColor(Color.WHITE);
+//        }
+//        //绘制一个圆形
+//        canvas.drawCircle(x, y, 50, mPaint);
+//        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
+//        mSurfaceHolder.unlockCanvasAndPost(canvas);
     }
     @Override
     public void run () {
@@ -97,4 +100,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     public void surfaceDestroyed (SurfaceHolder holder){
         mbLoop = false;
     }
+
+//    public void loading_img(){
+//        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResource(),R.drawable.bg);
+//    }
+
 }

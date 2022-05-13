@@ -21,8 +21,12 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        mMainView = new MainView(this);
-        setContentView(mMainView);
+//        mMainView = new MainView(this);
+//
+//
+//        getScreenHW();
+//
+//        setContentView(mMainView);
 
         Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener(new View.OnClickListener(){
@@ -30,22 +34,23 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,GameActivity.class);
-//                startActivity(intent);
+                startActivity(intent);
             }
         });
 
-//        button1.setOnClickListener((v)->{
-//            Toast.makeText(getApplicationContext(),"按了按钮",Toast.LENGTH_LONG).show();
-//        });
+
     }
 
-    public void gerScreenHW(){
+    public void getScreenHW(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
-        screenWidth = dm.widthPixels;
-//        Log.i(Tag,);
-        screenHeight = dm.heightPixels;
-
+//        //窗口宽度
+//        screenWidth = dm.widthPixels;
+//        Log.i(TAG,"screenWidth:"+screenWidth);
+//
+//        //窗口宽度
+//        screenHeight = dm.heightPixels;
+//        Log.i(TAG,"screenHeight:"+screenHeight);
     }
 }
