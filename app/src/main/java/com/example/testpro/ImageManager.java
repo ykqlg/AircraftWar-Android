@@ -1,6 +1,7 @@
 package com.example.testpro;
 
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -24,6 +25,10 @@ public class ImageManager {
     public static Bitmap BACKGROUND2_IMAGE;
     public static Bitmap BACKGROUND3_IMAGE;
 
+//    public void loading_img(){
+//        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResource(),R.drawable.bg);
+//        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.de
+//    }
 
 
 }
