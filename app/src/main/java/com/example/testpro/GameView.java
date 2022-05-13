@@ -6,13 +6,11 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 
 
-public class GameView {
-    public void loading_img(){
-        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResource(),R.drawable.bg);
-        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.de
-    }
+public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runnable{
+
     int count = 0;
     public float x = 50, y = 50;
     int screenWidth = 480, screenHeight = 800;
@@ -35,8 +33,8 @@ public class GameView {
         if (mSurfaceHolder == null || canvas == null) {
             return;
         }
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this,backGroundTop-screenHeight,mPaint);
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this,backGroundTop,mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-screenHeight,mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
         backGroundTop+=1;
 //        if(backGroundTop == screenHeight){
 //            this.backGroundTop = 0;

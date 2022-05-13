@@ -21,18 +21,19 @@ public class MainActivity extends AppCompatActivity {
         mMainView = new MainView(this);
         setContentView(mMainView);
 
+        getScreenHW();
         Button button1 = findViewById(R.id.button1);
         button1.setOnClickListener((v)->{
             Toast.makeText(getApplicationContext(),"按了按钮",Toast.LENGTH_LONG).show();
         });
     }
 
-    public void gerScreenHW(){
+    public void getScreenHW(){
         DisplayMetrics dm = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(dm);
 
         screenWidth = dm.widthPixels;
-//        Log.i(Tag,);
+        Log.i(Tag,);
         screenHeight = dm.heightPixels;
 
     }
