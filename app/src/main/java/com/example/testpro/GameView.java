@@ -27,7 +27,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mSurfaceHolder.addCallback(this);//发生回调时处理
         this.setFocusable(true);
 
-//        loading_img();//加载图片
+        loading_img();//加载图片
 
     }
     public void draw () {
@@ -101,8 +101,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mbLoop = false;
     }
 
-//    public void loading_img(){
-//        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResource(),R.drawable.bg);
-//    }
+    public void loading_img(){
+        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResources(),R.drawable.bg);
+    }
 
 }
