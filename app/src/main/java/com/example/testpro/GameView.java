@@ -5,20 +5,26 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.DisplayMetrics;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
+import android.view.WindowManager;
+
+import androidx.annotation.NonNull;
 
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runnable{
 
     int count = 0;
-    public float x = 50, y = 50;
-    int screenWidth = 480, screenHeight = 800;
+//    public float x = 50, y = 50;
+//    int screenWidth = 480, screenHeight = 800;
+    int screenWidth = MainActivity.screenWidth
+        , screenHeight = MainActivity.screenHeight;
     boolean mbLoop = false; //控制绘画线程的标志位
     private SurfaceHolder mSurfaceHolder;
     private Canvas canvas;  //绘图的画布
     private Paint mPaint;
-    private int backGroundTop;
+    private int backGroundTop=0;
     public GameView(Context context) {
         super(context);
         mbLoop = true;//画布循环渲染
@@ -27,7 +33,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         mSurfaceHolder.addCallback(this);//发生回调时处理
         this.setFocusable(true);
 
-//        loading_img();//加载图片
+        loading_img();//加载图片
 
     }
     public void draw () {
@@ -36,13 +42,15 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         if (mSurfaceHolder == null || canvas == null) {
             return;
         }
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-screenHeight,mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND1_IMAGE.getHeight(),mPaint);
         canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
-        backGroundTop+=1;
+        backGroundTop +=1;
         if(backGroundTop == screenHeight){
             this.backGroundTop = 0;
         }
 
+        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
+        mSurfaceHolder.unlockCanvasAndPost(canvas);
 //        if (count < 100) {
 //            count++;
 //        } else {
@@ -73,6 +81,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 //        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
 //        mSurfaceHolder.unlockCanvasAndPost(canvas);
     }
+
+
+
+    public void loading_img(){
+        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResources(),R.drawable.bg);
+    }
+
     @Override
     public void run () {
         //设置一个循环来绘制，通过标志位来控制开启绘制还是停止
@@ -87,22 +102,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         }
     }
     @Override
-    public void surfaceCreated (SurfaceHolder holder){
+    public void surfaceCreated (@NonNull SurfaceHolder holder){
         new Thread(this).start();
     }
     @Override
-    public void surfaceChanged (SurfaceHolder holder,int format, int width, int height)
+    public void surfaceChanged (@NonNull SurfaceHolder holder,int format, int width, int height)
     {
         screenWidth = width;
         screenHeight = height;
     }
     @Override
-    public void surfaceDestroyed (SurfaceHolder holder){
+    public void surfaceDestroyed (@NonNull SurfaceHolder holder){
         mbLoop = false;
     }
 
-//    public void loading_img(){
-//        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResource(),R.drawable.bg);
-//    }
+
 
 }
