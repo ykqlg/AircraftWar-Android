@@ -25,18 +25,18 @@ public class MainActivity extends AppCompatActivity {
         setContentView(mMainView);
 
         Button button1 = findViewById(R.id.button1);
-        /*button1.setOnClickListener(new View.OnClickListener(){
+        button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent();
                 intent.setClass(MainActivity.this,GameActivity.class);
 //                startActivity(intent);
             }
-        });*/
-
-        button1.setOnClickListener((v)->{
-            Toast.makeText(getApplicationContext(),"按了按钮",Toast.LENGTH_LONG).show();
         });
+
+//        button1.setOnClickListener((v)->{
+//            Toast.makeText(getApplicationContext(),"按了按钮",Toast.LENGTH_LONG).show();
+//        });
     }
 
     public void gerScreenHW(){
