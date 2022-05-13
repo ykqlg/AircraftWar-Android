@@ -1,6 +1,8 @@
 package com.example.testpro;
 
 import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.MotionEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -14,5 +16,20 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mGameView = new GameView(this);
         setContentView(mGameView);
+    }
+//    @Override
+//    public boolean onTouchEvent(MotionEvent event) {
+//        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+//            mGameView.x = event.getX();
+//            mGameView.y = event.getY();
+//        }
+//        return  true;
+//    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if(keyCode == KeyEvent.KEYCODE_BACK){
+            this.finish();
+        }
+        return true;
     }
 }
