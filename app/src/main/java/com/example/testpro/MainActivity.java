@@ -23,7 +23,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getScreenHW();
 
-        Button button1 = findViewById(R.id.button1);
+        Button button1 = findViewById(R.id.startButton);
         button1.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
