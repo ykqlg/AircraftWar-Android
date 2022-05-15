@@ -40,10 +40,10 @@ public class MainActivity extends AppCompatActivity {
         getWindowManager().getDefaultDisplay().getMetrics(dm);
         //窗口宽度
         screenWidth = dm.widthPixels;
-        Log.i("TAG","screenWidth:"+screenWidth);
+//        Log.i("TAG","screenWidth:"+screenWidth);
 
         //窗口高度
         screenHeight = dm.heightPixels;
-        Log.i("TAG","screenHeight:"+screenHeight);
+//        Log.i("TAG","screenHeight:"+screenHeight);
     }
 }

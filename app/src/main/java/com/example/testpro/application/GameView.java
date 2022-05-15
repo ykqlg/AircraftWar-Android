@@ -14,6 +14,7 @@ import com.example.testpro.MainActivity;
 import com.example.testpro.R;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.aircraft.HeroAircraft;
+import com.example.testpro.aircraft.MobEnemy;
 import com.example.testpro.basic.AbstractFlyingObject;
 import com.example.testpro.enemyfactory.EnemyFactory;
 import com.example.testpro.enemyfactory.MobFactory;
@@ -27,13 +28,13 @@ import java.util.concurrent.TimeUnit;
 
 public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runnable{
 
-//    int count = 0;
-//    public float x = 50, y = 50;
-    public float x,y;
+    public float x , y ;
+//    public float x = MainActivity.screenWidth / 2;
+//    public float y = MainActivity.screenHeight - ImageManager.HERO_IMAGE.getHeight();
 //    int screenWidth = 480, screenHeight = 800;
     int screenWidth = MainActivity.screenWidth
         , screenHeight = MainActivity.screenHeight;
-    boolean mbLoop = false; //控制绘画线程的标志位
+    boolean mbLoop = true; //控制绘画线程的标志位
     private SurfaceHolder mSurfaceHolder;
     private Canvas canvas;  //绘图的画布
     private Paint mPaint;
@@ -52,7 +53,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     /**
      * 时间间隔(ms)，控制刷新频率
      */
-    private int timeInterval = 40;
+    private int timeInterval = 20;
     private int time = 0;
     /**
      * 周期（ms)
@@ -75,75 +76,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 
         loading_img();//加载图片
         heroAircraft = HeroAircraft.getHeroAircraft();
+
         enemyAircrafts = new LinkedList<>();
 
-    }
-    public void draw () {
-        //通过SurfaceHolder对象的lockCanvans()方法，我们可以获取当前的Canvas绘图对象
-        canvas = mSurfaceHolder.lockCanvas();
-        if (mSurfaceHolder == null || canvas == null) {
-            return;
-        }
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND1_IMAGE.getHeight(),mPaint);
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
-        this.backGroundTop += 1;
-//        System.out.println(this.backGroundTop);//用于测试
-        if(this.backGroundTop == screenHeight){
-            this.backGroundTop = 0;
-        }
-
-//        System.out.println(heroAircraft.getLocationX()-ImageManager.HERO_IMAGE.getWidth() / 2);//位置测试
-        canvas.drawBitmap(ImageManager.HERO_IMAGE,
-                heroAircraft.getLocationX()-ImageManager.HERO_IMAGE.getWidth() / 2,heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight() / 2,mPaint);
-
-//        paintImageWithPositionRevised(canvas,enemyAircrafts);
-        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
-        mSurfaceHolder.unlockCanvasAndPost(canvas);
-//        if (count < 100) {
-//            count++;
-//        } else {
-//            count = 0;
-//        }
-//        mPaint.setAntiAlias(true);
-//        mPaint.setColor(Color.BLUE);
-//        //绘制一个全屏大小的矩形
-//        canvas.drawRect(0, 0, screenWidth, screenHeight, mPaint);
-//        switch (count % 4) {
-//            case 0:
-//                mPaint.setColor(Color.BLUE);
-//                break;
-//            case 1:
-//                mPaint.setColor(Color.GREEN);
-//                break;
-//            case 2:
-//                mPaint.setColor(Color.RED);
-//                break;
-//            case 3:
-//                mPaint.setColor(Color.YELLOW);
-//                break;
-//            default:
-//                mPaint.setColor(Color.WHITE);
-//        }
-//        //绘制一个圆形
-//        canvas.drawCircle(x, y, 50, mPaint);
-//        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
-//        mSurfaceHolder.unlockCanvasAndPost(canvas);
-    }
-    private void paintImageWithPositionRevised(Canvas canvas, List<? extends AbstractFlyingObject> objects) {
-        if (objects.size() == 0) {
-            return;
-        }
-        for (int i=0;i<objects.size();i++) {
-            Bitmap image = objects.get(i).getImage();
-            assert image != null : objects.getClass().getName() + " has no image! ";
-            canvas.drawBitmap(image, objects.get(i).getLocationX() - image.getWidth() / 2,
-                    objects.get(i).getLocationY() - image.getHeight() / 2, mPaint);
-        }
-    }
-    public void loading_img(){
-        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
-        ImageManager.HERO_IMAGE = BitmapFactory.decodeResource(getResources(),R.drawable.hero);
-        ImageManager.MOB_ENEMY_IMAGE = BitmapFactory.decodeResource(getResources(),R.drawable.mob);
     }
 
     public void action(){
@@ -152,40 +87,43 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
                 System.out.println(time);
-                heroAircraft.setLocation(x, y);
                 // 新敌机产生
                 enemyProduce();
 //                // 飞机射出子弹
 //                shootAction();
-//                // 子弹移动
-//                bulletsMoveAction();
-//
-                // 飞机移动
-                aircraftsMoveAction();
-//
-//                // 道具移动
-//                propsMoveAction();
-//
-//                // 撞击检测
-//                try {
-//                    crashCheckAction();
-//                } catch (InterruptedException e) {
-//                    e.printStackTrace();
-//                }
-//
-//                // 后处理
-//                postProcessAction();
-//
-                //每个时刻重绘界面
-//                synchronized (mSurfaceHolder) {
-                    draw();
-//                }
-//                try {
-//                    Thread.sleep(200);
-//                } catch (Exception e) {
-//
-//                }
             }
+            //这边的x，y一开始默认都为0
+            heroAircraft.setLocation(x, y);
+
+            draw();
+            // 子弹移动
+//            bulletsMoveAction();
+//
+            // 飞机移动
+            aircraftsMoveAction();
+//
+            // 道具移动
+//            propsMoveAction();
+
+            // 撞击检测
+//            try {
+//                crashCheckAction();
+//            } catch (InterruptedException e) {
+//                e.printStackTrace();
+//            }
+
+            // 后处理
+//            postProcessAction();
+
+//          每个时刻重绘界面
+//            synchronized (mSurfaceHolder) {
+//                draw();
+//            }
+//            try {
+//                Thread.sleep(200);
+//            } catch (Exception e) {
+//
+//            }
 
         };
         /**
@@ -194,6 +132,12 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
          */
         executorService.scheduleWithFixedDelay(task, timeInterval, timeInterval, TimeUnit.MILLISECONDS);
     }
+
+
+    //***********************
+    //      Action 各部分
+    //***********************
+
     private boolean timeCountAndNewCycleJudge() {
         cycleTime += timeInterval;
         if (cycleTime >= cycleDuration && cycleTime - timeInterval < cycleTime) {
@@ -204,6 +148,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             return false;
         }
     }
+
     public void enemyProduce(){
         enemyMaxNumber = 3;
         if (enemyAircrafts.size() < enemyMaxNumber) {
@@ -213,6 +158,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             enemyAircrafts.add(enemyAircraft);
         }
     }
+
     private void aircraftsMoveAction() {
         for (AbstractAircraft enemyAircraft : enemyAircrafts) {
             enemyAircraft.forward();
@@ -235,21 +181,86 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 //            }
 //        }
     }
+
+
+
+    //***********************
+    //      Paint 各部分
+    //***********************
+
+    public void loading_img() {
+
+        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        ImageManager.HERO_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
+        ImageManager.MOB_ENEMY_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.mob);
+
+        ImageManager.CLASSNAME_IMAGE_MAP.put(HeroAircraft.class.getName(), ImageManager.HERO_IMAGE);
+        ImageManager.CLASSNAME_IMAGE_MAP.put(MobEnemy.class.getName(), ImageManager.MOB_ENEMY_IMAGE);
+    }
+
+    public void draw () {
+        //画布滚动
+        canvasRoling();
+
+        //绘制英雄机
+        canvas.drawBitmap(ImageManager.HERO_IMAGE,
+                heroAircraft.getLocationX()-ImageManager.HERO_IMAGE.getWidth() / 2,
+                heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight() / 2,mPaint);
+
+        //绘制敌机
+        paintImageWithPositionRevised(canvas,enemyAircrafts);
+
+
+        //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
+        mSurfaceHolder.unlockCanvasAndPost(canvas);
+//
+    }
+
+    private void paintImageWithPositionRevised(Canvas canvas, List<? extends AbstractFlyingObject> objects) {
+        if (objects.size() == 0) {
+            return;
+        }
+        for (int i=0;i<objects.size();i++) {
+            Bitmap image = objects.get(i).getImage();
+            assert image != null : objects.getClass().getName() + " has no image! ";
+
+            canvas.drawBitmap(image, objects.get(i).getLocationX() - image.getWidth() / 2,
+                    objects.get(i).getLocationY() - image.getHeight() / 2, mPaint);
+
+        }
+    }
+
+    private void canvasRoling(){
+
+        //通过SurfaceHolder对象的lockCanvans()方法，我们可以获取当前的Canvas绘图对象
+        canvas = mSurfaceHolder.lockCanvas();
+        if (mSurfaceHolder == null || canvas == null) {
+            return;
+        }
+        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND1_IMAGE.getHeight(),mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
+        this.backGroundTop += 7;
+        if(this.backGroundTop == screenHeight){
+            this.backGroundTop = 0;
+        }
+    }
+
     @Override
     public void surfaceCreated (@NonNull SurfaceHolder holder){
         new Thread(this).start();
     }
+
     @Override
     public void surfaceChanged (@NonNull SurfaceHolder holder,int format, int width, int height)
     {
         screenWidth = width;
         screenHeight = height;
     }
+
     @Override
     public void surfaceDestroyed (@NonNull SurfaceHolder holder){
         mbLoop = false;
     }
-
 
 
 }

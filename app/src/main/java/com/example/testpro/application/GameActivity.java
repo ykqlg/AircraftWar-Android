@@ -25,8 +25,15 @@ public class GameActivity extends AppCompatActivity {
             mGameView.x = event.getX();
             mGameView.y = event.getY();
         }
+//        if (event.getAction() == MotionEvent.) {
+//            System.out.println("why");
+//            mGameView.x = event.getX();
+//            mGameView.y = event.getY();
+//        }
         return  true;
     }
+
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {

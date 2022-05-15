@@ -29,9 +29,11 @@ public class HeroAircraft extends AbstractAircraft {
         if(heroAircraft==null){
             synchronized (HeroAircraft.class) {
                 if (heroAircraft == null) {
+
                     heroAircraft = new HeroAircraft(MainActivity.screenWidth / 2,
                             MainActivity.screenHeight - ImageManager.HERO_IMAGE.getHeight() ,
                             0, 0, 300);
+
 //                    Strategy heroSingleType = new HeroDoubleType();
 //                    heroAircraft.setStrategy(heroSingleType);
                 }
