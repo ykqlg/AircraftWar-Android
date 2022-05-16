@@ -1,10 +1,13 @@
 package com.example.testpro.application;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.example.testpro.MainActivity;
 
 public class GameActivity extends AppCompatActivity {
     private GameView mGameView;
@@ -15,6 +18,13 @@ public class GameActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         mGameView = new GameView(this);
         setContentView(mGameView);
+//        while (true){
+//            if(mGameView.gameOverFlag==true){
+//                Intent intent = new Intent();
+//                intent.setClass(GameActivity.this, ScoreTableActivity.class);
+//                startActivity(intent);
+//            }
+//        }
     }
 
 
