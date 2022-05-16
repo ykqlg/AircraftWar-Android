@@ -7,12 +7,14 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.media.MediaPlayer;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 import androidx.annotation.NonNull;
 
 import com.example.testpro.MainActivity;
+import com.example.testpro.MusicService;
 import com.example.testpro.R;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.aircraft.BossEnemy;
@@ -85,6 +87,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     protected int bossScoreThreshold = 800 ;
     protected boolean bossDied = true;
     protected boolean bossHappened = false;
+    protected MusicService musicService;
 //    protected MusicThread musicThread;
     protected int lastScore;
     protected int cycleTimeFlag=0;
@@ -121,6 +124,16 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
     public void action(){
+
+//        if(MainActivity.musicFlag){
+//
+//            System.out.println("here?");
+////            musicService = new MusicService(R.raw.bgm);
+//            musicService = new MusicService();
+//            musicService.setRepeat();
+//            musicService.playMusic();
+//        }
+
         Runnable task = () -> {
 //            time += timeInterval;
 
