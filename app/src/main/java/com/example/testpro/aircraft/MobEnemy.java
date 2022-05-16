@@ -2,6 +2,7 @@ package com.example.testpro.aircraft;
 
 
 import com.example.testpro.MainActivity;
+import com.example.testpro.application.GameView;
 import com.example.testpro.bullet.BaseBullet;
 
 import java.util.LinkedList;
@@ -47,7 +48,9 @@ public class MobEnemy extends AbstractAircraft /*观察者模式*//*implements D
 //    }
     @Override
     public void bomb(){
+        GameView.score = GameView.score + 40;
 
+        vanish();
     }
 
 }

@@ -42,7 +42,8 @@ public class UserDaoImpl implements UserDao {
         });
         //对排序后的结果，使用遍历去设置排名
         int rank=1;
-        for(User user:users){
+        for(int i=0; i<users.size();i++){
+            User user = users.get(i);
             user.setUserRank(rank);
             rank++;
         }

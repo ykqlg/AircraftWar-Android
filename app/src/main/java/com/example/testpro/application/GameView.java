@@ -89,6 +89,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 
 
     public GameView(Context context) {
+
         super(context);
         mbLoop = true;//画布循环渲染
         mPaint = new Paint();  //设置画笔
@@ -119,10 +120,11 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 
     public void action(){
         Runnable task = () -> {
-            time += timeInterval;
+//            time += timeInterval;
+
             // 周期性执行（控制频率）
             if (timeCountAndNewCycleJudge()) {
-                System.out.println("time:"+time);
+//                System.out.println("time:"+time);
                 // 新敌机产生
                 enemyProduce();
                 // 飞机射出子弹
@@ -130,9 +132,6 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             }
             //这边的x，y一开始默认都为0
             heroAircraft.setLocation(x, y);
-
-            //绘制界面
-            draw();
 
             // 子弹移动
             bulletsMoveAction();
@@ -153,6 +152,9 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             // 后处理
             postProcessAction();
 
+            //绘制界面
+            draw();
+
 //          每个时刻重绘界面
 //            synchronized (mSurfaceHolder) {
 //                draw();
@@ -162,6 +164,23 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
 //            } catch (Exception e) {
 //
 //            }
+
+            // 游戏结束检查
+            if (heroAircraft.getHp() <= 0) {
+                // 游戏结束
+                executorService.shutdown();
+                gameOverFlag = true;
+
+//                if(Main.musicFlag){
+//
+//                    new MusicThread("src/videos/game_over.wav").start();
+//                    musicThread.stopMusic();
+//                }
+                System.out.println("Game Over!");
+//                synchronized (Main.panelLock) {
+//                    Main.panelLock.notify();
+//                }
+            }
 
         };
         /**
@@ -280,6 +299,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
             EnemyFactory eliteFactory = new EliteFactory();
             eliteFactory.bloodUp();
             eliteFactory.speedUp();
+
             EnemyFactory mobFactory = new MobFactory();
             mobFactory.bloodUp();
             mobFactory.speedUp();
@@ -310,7 +330,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     }
 
     protected void bombEmpty(AbstractProp abstractProp){
-        for(AbstractAircraft abstractAircraft:enemyAircrafts){
+        for(int i =0 ; i<enemyAircrafts.size();i++){
+            AbstractAircraft abstractAircraft = enemyAircrafts.get(i);
             if(abstractAircraft instanceof BossEnemy){
                 continue;
             }
@@ -318,7 +339,8 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                 abstractProp.addSubscribe(abstractAircraft);
             }
         }
-        for(BaseBullet baseBullet:enemyBullets){
+        for(int i = 0; i<enemyBullets.size();i++){
+            BaseBullet baseBullet = enemyBullets.get(i);
             abstractProp.addSubscribe(baseBullet);
         }
     }
@@ -365,6 +387,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                     enemyAircraft.decreaseHp(bullet.getPower());
 //                    bullet.musicEffect();
                     bullet.vanish();
+
                     if (enemyAircraft.notValid()) {
                         //根据击落敌机的类型判断
 
@@ -379,10 +402,10 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
                             lastScore = score;//重置boss生成阈值
                             bossDied = true;//标记boss已死亡
 //                            if(Main.musicFlag){
-//////                                System.out.println("why");
-////                                musicThread = new MusicThread("src/videos/bgm.wav");
-////                                musicThread.start();
-////                            }
+//                                System.out.println("why");
+//                                musicThread = new MusicThread("src/videos/bgm.wav");
+//                                musicThread.start();
+//                            }
                             enemyAircraft.vanish();
                             ((BossEnemy) enemyAircraft).generateProp(props);
                         }
@@ -405,19 +428,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         }
 
         //  我方获得道具，道具生效
-//        for(AbstractProp prop : props){
-//            if(prop.crash(heroAircraft) || heroAircraft.crash(prop)){
-//                if(prop instanceof BombProp){
-//                    bombEmpty(prop);
-//                    prop.influence(heroAircraft);
-//
-//                }
-//                else{
-//                    prop.influence(heroAircraft);
-//                }
-//                prop.vanish();
-//            }
-//        }
+        for(int i = 0; i< props.size();i++){
+            AbstractProp prop = props.get(i);
+            if(prop.crash(heroAircraft) || heroAircraft.crash(prop)){
+                if(prop instanceof BombProp){
+                    bombEmpty(prop);
+                    prop.influence(heroAircraft);
+
+                }
+                else{
+                    prop.influence(heroAircraft);
+                }
+                prop.vanish();
+            }
+        }
     }
 
 
@@ -433,8 +457,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         enemyBullets.removeIf(AbstractFlyingObject::notValid);
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
         heroBullets.removeIf(AbstractFlyingObject::notValid);
-
-//        props.removeIf(AbstractFlyingObject::notValid);
+        props.removeIf(AbstractFlyingObject::notValid);
     }
 
 
@@ -520,7 +543,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         }
         canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND1_IMAGE.getHeight(),mPaint);
         canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
-        this.backGroundTop += 7;
+        this.backGroundTop += 1;
         if(this.backGroundTop >= screenHeight){
             this.backGroundTop = this.backGroundTop-screenHeight;
         }

@@ -10,7 +10,7 @@ import java.util.Random;
 public class BossFactory implements EnemyFactory{
     private int locationX = (int) ( Math.random() * (MainActivity.screenWidth - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1;
     private int locationY = (int) (Math.random() * MainActivity.screenHeight* 0.2)*1;
-    private static int speedX = 2;
+    private static int speedX = 6;
     private int baseSpeed = 1;
 
     private int speedY = 0;

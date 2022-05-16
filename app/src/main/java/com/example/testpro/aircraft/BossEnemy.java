@@ -93,17 +93,17 @@ public class BossEnemy extends AbstractAircraft {
 
             if(pro>=0 && pro<=2){
                 propFactory = new BloodPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 2) ;
+                prop = propFactory.generateProp(x, y, 0, 10) ;
                 props.add(prop);
             }
             else if(pro>=3 && pro<=5){
                 propFactory = new BombPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 2) ;
+                prop = propFactory.generateProp(x, y, 0, 10) ;
                 props.add(prop);
             }
             else if(pro>=6 && pro<=8){
                 propFactory = new BulletPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 2) ;
+                prop = propFactory.generateProp(x, y, 0, 10) ;
                 props.add(prop);
             }
             else{

@@ -21,7 +21,7 @@ public class GameActivity extends AppCompatActivity {
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        if (event.getAction() == MotionEvent.ACTION_DOWN) {
+        if (event.getAction() == MotionEvent.ACTION_MOVE) {
             mGameView.x = event.getX();
             mGameView.y = event.getY();
         }
