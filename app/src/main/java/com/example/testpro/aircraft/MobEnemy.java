@@ -2,6 +2,7 @@ package com.example.testpro.aircraft;
 
 
 import com.example.testpro.MainActivity;
+import com.example.testpro.bullet.BaseBullet;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -27,6 +28,10 @@ public class MobEnemy extends AbstractAircraft /*观察者模式*//*implements D
         }
     }
 
+    @Override
+    public List<BaseBullet> shoot() {
+        return new LinkedList<>();
+    }
 
 //    @Override
 //    public List<BaseBullet> executeStrategy() {
@@ -40,5 +45,9 @@ public class MobEnemy extends AbstractAircraft /*观察者模式*//*implements D
 //    public void update() {
 //        this.vanish();
 //    }
+    @Override
+    public void bomb(){
+
+    }
 
 }

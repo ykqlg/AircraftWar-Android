@@ -5,7 +5,7 @@ android {
     buildToolsVersion var1
     defaultConfig {
         applicationId "com.example.testpro"
-        minSdkVersion 15
+        minSdkVersion 24
         targetSdkVersion var
         versionCode 1
         versionName "1.0"

@@ -1,6 +1,8 @@
 package com.example.testpro.aircraft;
 
 import com.example.testpro.basic.AbstractFlyingObject;
+import com.example.testpro.bullet.BaseBullet;
+import com.example.testpro.strategy.Strategy;
 
 import java.util.List;
 
@@ -16,6 +18,9 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
      */
     protected int maxHp;
     protected int hp;
+    protected int direction;
+    protected int shootNum;
+    protected int power;
 //    public Strategy strategy;
 
     public AbstractAircraft(int locationX, int locationY, int speedX, int speedY, int hp) {
@@ -31,12 +36,37 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
             vanish();
         }
     }
-    public void increaseHp(int increase){
-        hp += increase;
-    }
+
 
     public int getHp() {
         return hp;
+    }
+
+    public int getDirection() {
+        return direction;
+    }
+
+    public int getShootNum() {
+        return shootNum;
+    }
+
+    public int getPower() {
+        return power;
+    }
+
+    public void increaseHp(int increase){
+        hp += increase;
+        if(hp>=maxHp){
+            hp = maxHp;
+        }
+    }
+
+    public void increaseShootNum(){
+        this.shootNum += 1;
+    }
+
+    public void resetShootNum(int num){
+        this.shootNum = num;
     }
 
 
@@ -53,5 +83,17 @@ public abstract class AbstractAircraft extends AbstractFlyingObject {
 //    public abstract List<BaseBullet> executeStrategy();
 //
 //    public abstract List<AbstractProp> leave();
+
+    public abstract List<BaseBullet> shoot();
+
+    protected Strategy strategy;
+
+    public void setStrategy(Strategy strategy){
+        this.strategy = strategy;
+    }
+
+    public List<BaseBullet> executeStrategy(AbstractAircraft abstractAircraft)  {
+        return strategy.doOperation(abstractAircraft);
+    }
 
 }
