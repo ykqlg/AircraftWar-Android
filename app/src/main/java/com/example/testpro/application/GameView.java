@@ -1,9 +1,11 @@
 package com.example.testpro.application;
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.graphics.Color;
 import android.graphics.Paint;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -169,14 +171,13 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             if (heroAircraft.getHp() <= 0) {
                 // 游戏结束
                 executorService.shutdown();
-                gameOverFlag = true;
 
 //                if(Main.musicFlag){
-//
 //                    new MusicThread("src/videos/game_over.wav").start();
 //                    musicThread.stopMusic();
 //                }
                 System.out.println("Game Over!");
+                gameOverFlag = true;
 //                synchronized (Main.panelLock) {
 //                    Main.panelLock.notify();
 //                }
@@ -512,13 +513,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 heroAircraft.getLocationX()-ImageManager.HERO_IMAGE.getWidth() / 2,
                 heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight() / 2,mPaint);
 
-
+        //绘制得分和生命值
+                paintScoreAndLife(canvas);
 
         //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
         mSurfaceHolder.unlockCanvasAndPost(canvas);
-
-        //绘制得分和生命值
-//        paintScoreAndLife(g);
 
     }
 
@@ -551,16 +550,20 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-//    绘制排行榜（不会弄）
-//    void paintScoreAndLife(Graphics g) {
-//        int x = 10;
-//        int y = 25;
-//        g.setColor(new Color(16711680));
+    //绘制分数和生命值
+    private void paintScoreAndLife(Canvas canvas) {
+        int x = 50;
+        int y = 200;
+        mPaint.setColor(Color.BLACK);
+        mPaint.setTextSize((float) 100.0);
 //        g.setFont(new Font("SansSerif", Font.BOLD, 22));
+        canvas.drawText("SCORE:" + this.score,x,y,mPaint);
 //        g.drawString("SCORE:" + this.score, x, y);
-//        y = y + 20;
+        y = y + 300;
+        canvas.drawText("LIFE:" + this.heroAircraft.getHp(),x,y,mPaint);
 //        g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
-//    }
+    }
+
 
     @Override
     public void surfaceCreated (@NonNull SurfaceHolder holder){
@@ -578,6 +581,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     public void surfaceDestroyed (@NonNull SurfaceHolder holder){
         mbLoop = false;
     }
+
 
 
 }
