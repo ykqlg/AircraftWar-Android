@@ -28,7 +28,6 @@ public class DirectBullet implements Strategy{
             int y = abstractAircraft.getLocationY() + direction*2;
             int speedX = 0;
             int speedY = abstractAircraft.getSpeedY() + direction*10;
-            System.out.println(abstractAircraft.getSpeedY());
 
             for(int i=0; i<shootNum; i++){
                 // 子弹发射位置相对飞机位置向前偏移

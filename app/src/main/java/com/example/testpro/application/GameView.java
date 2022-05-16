@@ -263,7 +263,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 //
 //    }
 
-    private void aircraftsMoveAction() {
+    public void aircraftsMoveAction() {
         for(int i = 0 ; i<enemyAircrafts.size();i++){
             enemyAircrafts.get(i).forward();
 
@@ -554,7 +554,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     private void paintScoreAndLife(Canvas canvas) {
         int x = 50;
         int y = 200;
-        mPaint.setColor(Color.BLACK);
+        mPaint.setColor(Color.RED);
         mPaint.setTextSize((float) 100.0);
 //        g.setFont(new Font("SansSerif", Font.BOLD, 22));
         canvas.drawText("SCORE:" + this.score,x,y,mPaint);

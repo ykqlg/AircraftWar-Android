@@ -6,15 +6,17 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Switch;
 
-import com.example.testpro.application.GameActivity;
+import com.example.testpro.application.EasyGame.EasyGameActivity;
+import com.example.testpro.application.HardGame.HardGameActivity;
+import com.example.testpro.application.MediumGame.MediumGameActivity;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    public static boolean musicFlag = false;
     public static int screenWidth;
     public static int screenHeight;
     @Override
@@ -23,12 +25,43 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getScreenHW();
 
-        Button button1 = findViewById(R.id.startButton);
-        button1.setOnClickListener(new View.OnClickListener(){
+        Switch soundSwitch = findViewById(R.id.soundSwitch);
+
+        Button easyButton = findViewById(R.id.easyButton);
+        easyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                if(soundSwitch.isChecked()==true){
+                    musicFlag = true;
+                }
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, GameActivity.class);
+                intent.setClass(MainActivity.this, EasyGameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button commonButton = findViewById(R.id.commonButton);
+        commonButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if(soundSwitch.isChecked()==true){
+                    musicFlag = true;
+                }
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, MediumGameActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        Button hardButton = findViewById(R.id.hardButton);
+        hardButton.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                if(soundSwitch.isChecked()==true){
+                    musicFlag = true;
+                }
+                Intent intent = new Intent();
+                intent.setClass(MainActivity.this, HardGameActivity.class);
                 startActivity(intent);
             }
         });

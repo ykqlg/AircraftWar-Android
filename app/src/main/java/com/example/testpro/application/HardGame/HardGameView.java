@@ -36,8 +36,13 @@ public class HardGameView extends GameView {
     public void enemyProduce() {
         EnemyFactory enemyFactory;
         double pro = Math.random();
+        enemyMaxNumber = 5;
 
+
+//        System.out.println("[");
         difficultyIncrease();
+//        System.out.println("]");
+
 
         //随机生成精英机和普通机
         if (enemyAircrafts.size() < enemyMaxNumber) {
