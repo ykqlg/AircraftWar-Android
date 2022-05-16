@@ -1,17 +1,20 @@
 package com.example.testpro.application.MediumGame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.testpro.application.EasyGame.EasyGameActivity;
 import com.example.testpro.application.EasyGame.EasyGameView;
 import com.example.testpro.application.GameView;
+import com.example.testpro.application.ScoreTableActivity;
 
 public class MediumGameActivity extends AppCompatActivity {
     private GameView mGameView;
-
+    public static final Object GAME_LOCK = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +22,18 @@ public class MediumGameActivity extends AppCompatActivity {
 //        mGameView = new GameView(this);
         mGameView = new MediumGameView(this);
         setContentView(mGameView);
+//        synchronized (GAME_LOCK){
+//            while(mGameView.gameOverFlag==false){
+//                try {
+//                    GAME_LOCK.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        Intent intent = new Intent();
+//        intent.setClass(MediumGameActivity.this, ScoreTableActivity.class);
+//        startActivity(intent);
     }
 
 

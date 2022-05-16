@@ -38,6 +38,8 @@ public class MediumGameView extends GameView {
     public void enemyProduce() {
         EnemyFactory enemyFactory;
         double pro = Math.random();
+        enemyMaxNumber = 5;
+
 
         difficultyIncrease();
 

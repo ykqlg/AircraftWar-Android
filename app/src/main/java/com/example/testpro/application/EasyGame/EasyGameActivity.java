@@ -10,7 +10,7 @@ import com.example.testpro.application.GameView;
 
 public class EasyGameActivity extends AppCompatActivity {
     private GameView mGameView;
-
+    public static final Object GAME_LOCK = new Object();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -18,6 +18,18 @@ public class EasyGameActivity extends AppCompatActivity {
 //        mGameView = new GameView(this);
         mGameView = new EasyGameView(this);
         setContentView(mGameView);
+//        synchronized (GAME_LOCK){
+//            while(mGameView.gameOverFlag==false){
+//                try {
+//                    GAME_LOCK.wait();
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//        }
+//        Intent intent = new Intent();
+//        intent.setClass(EasyGameActivity.this, ScoreTableActivity.class);
+//        startActivity(intent);
     }
 
 
