@@ -1,4 +1,4 @@
-package com.example.testpro.application;
+package com.example.testpro.application.EasyGame;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -6,9 +6,9 @@ import android.view.MotionEvent;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.testpro.application.EasyGame.EasyGameView;
+import com.example.testpro.application.GameView;
 
-public class GameActivity extends AppCompatActivity {
+public class EasyGameActivity extends AppCompatActivity {
     private GameView mGameView;
 
 

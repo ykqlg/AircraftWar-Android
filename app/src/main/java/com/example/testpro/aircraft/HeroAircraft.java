@@ -41,7 +41,7 @@ public class HeroAircraft extends AbstractAircraft {
 
                     heroAircraft = new HeroAircraft(MainActivity.screenWidth / 2,
                             MainActivity.screenHeight - ImageManager.HERO_IMAGE.getHeight() ,
-                            0, 0, 1000);
+                            0,-7,1000);
 
 //                    Strategy heroSingleType = new HeroDoubleType();
 //                    heroAircraft.setStrategy(heroSingleType);

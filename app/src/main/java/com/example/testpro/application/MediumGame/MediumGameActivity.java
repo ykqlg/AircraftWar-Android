@@ -1,4 +1,4 @@
-package com.example.testpro.application;
+package com.example.testpro.application.MediumGame;
 
 import android.os.Bundle;
 import android.view.KeyEvent;
@@ -7,8 +7,9 @@ import android.view.MotionEvent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testpro.application.EasyGame.EasyGameView;
+import com.example.testpro.application.GameView;
 
-public class GameActivity extends AppCompatActivity {
+public class MediumGameActivity extends AppCompatActivity {
     private GameView mGameView;
 
 
@@ -16,7 +17,7 @@ public class GameActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 //        mGameView = new GameView(this);
-        mGameView = new EasyGameView(this);
+        mGameView = new MediumGameView(this);
         setContentView(mGameView);
     }
 

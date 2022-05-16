@@ -37,7 +37,7 @@ import java.util.concurrent.ScheduledThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 
-public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runnable{
+public abstract class GameView extends SurfaceView implements SurfaceHolder.Callback,Runnable{
 
     //鼠标坐标
     public float x , y ;
@@ -46,13 +46,13 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     int screenWidth = MainActivity.screenWidth;
     int screenHeight = MainActivity.screenHeight;
     boolean mbLoop = true; //控制绘画线程的标志位
-    private SurfaceHolder mSurfaceHolder;
-    private Canvas canvas;  //绘图的画布
-    private Paint mPaint;
+    public SurfaceHolder mSurfaceHolder;
+    public Canvas canvas;  //绘图的画布
+    public Paint mPaint;
 
-    private int backGroundTop=0;
-    private final HeroAircraft heroAircraft;
-    private float eliteEnemyCreatePro = 0.4f;
+    public int backGroundTop=0;
+    public final HeroAircraft heroAircraft;
+    public float eliteEnemyCreatePro = 0.4f;
 
     public int enemyMaxNumber;
     public List<AbstractAircraft> enemyAircrafts;
@@ -64,20 +64,20 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     /**
      * Scheduled 线程池，用于任务调度
      */
-    private final ScheduledExecutorService executorService;
+    public final ScheduledExecutorService executorService;
     public static int score = 0;
 
     /**
      * 时间间隔(ms)，控制刷新频率
      */
-    private int timeInterval = 20;
-    private int time = 0;
+    public int timeInterval = 20;
+    public int time = 0;
     /**
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
      */
-    private int cycleDuration = 400;
-    private int cycleTime = 0;
+    public int cycleDuration = 400;
+    public int cycleTime = 0;
 
     public boolean gameOverFlag = false;
     protected int bossScoreThreshold = 800 ;
@@ -195,7 +195,7 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
     //      Action 各部分
     //***********************
 
-    private boolean timeCountAndNewCycleJudge() {
+    public boolean timeCountAndNewCycleJudge() {
         cycleTime += timeInterval;
         if (cycleTime >= cycleDuration && cycleTime - timeInterval < cycleTime) {
             // 跨越到新的周期
@@ -228,37 +228,39 @@ public class GameView extends SurfaceView implements SurfaceHolder.Callback,Runn
         }
     }
 
-    public void enemyProduce(){
-        double pro = Math.random();
-        enemyMaxNumber = 5;
+    public abstract void enemyProduce();
 
-        //随机生成精英机和普通机
-        if (enemyAircrafts.size() < enemyMaxNumber) {
-
-            if(pro<eliteEnemyCreatePro){
-                enemyFactory = new EliteFactory();
-                enemyAircraft = enemyFactory.createEnemy();
-            }
-            else{
-                enemyFactory = new MobFactory();
-                enemyAircraft = enemyFactory.createEnemy();
-            }
-            enemyAircrafts.add(enemyAircraft);
-        }
-        if (createBoss()) {
-            bossHappened = true;
-            enemyFactory = new BossFactory();
-            System.out.println("Boss敌机血量为：" + enemyFactory.getHp());
-            //停止当前游戏bgm
-//            if (Main.musicFlag) {
-//                musicThread.stopMusic();
+//    public void enemyProduce(){
+//        double pro = Math.random();
+//        enemyMaxNumber = 5;
+//
+//        //随机生成精英机和普通机
+//        if (enemyAircrafts.size() < enemyMaxNumber) {
+//
+//            if(pro<eliteEnemyCreatePro){
+//                enemyFactory = new EliteFactory();
+//                enemyAircraft = enemyFactory.createEnemy();
 //            }
-
-            enemyAircrafts.add(enemyFactory.createEnemy());
-        }
-
-
-    }
+//            else{
+//                enemyFactory = new MobFactory();
+//                enemyAircraft = enemyFactory.createEnemy();
+//            }
+//            enemyAircrafts.add(enemyAircraft);
+//        }
+//        if (createBoss()) {
+//            bossHappened = true;
+//            enemyFactory = new BossFactory();
+//            System.out.println("Boss敌机血量为：" + enemyFactory.getHp());
+//            //停止当前游戏bgm
+////            if (Main.musicFlag) {
+////                musicThread.stopMusic();
+////            }
+//
+//            enemyAircrafts.add(enemyFactory.createEnemy());
+//        }
+//
+//
+//    }
 
     private void aircraftsMoveAction() {
         for(int i = 0 ; i<enemyAircrafts.size();i++){

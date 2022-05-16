@@ -9,7 +9,7 @@ public class MobFactory implements EnemyFactory{
     private int locationX = (int) ( Math.random() * (MainActivity.screenWidth - ImageManager.MOB_ENEMY_IMAGE.getWidth()))*1;
     private int locationY = (int) (Math.random() * MainActivity.screenHeight* 0.2)*1;
     private int speedX = 0;
-    private static int speedY = 12;
+    private static int speedY = 10;
     private int baseSpeed = 1;
     private static int hp = 30;
     private int baseHp = 30;
