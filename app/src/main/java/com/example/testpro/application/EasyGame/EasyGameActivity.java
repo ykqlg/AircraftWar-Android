@@ -1,5 +1,6 @@
 package com.example.testpro.application.EasyGame;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.MotionEvent;
@@ -7,6 +8,7 @@ import android.view.MotionEvent;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testpro.application.GameView;
+import com.example.testpro.application.ScoreTableActivity;
 
 public class EasyGameActivity extends AppCompatActivity {
     private GameView mGameView;
@@ -30,6 +32,15 @@ public class EasyGameActivity extends AppCompatActivity {
 //        Intent intent = new Intent();
 //        intent.setClass(EasyGameActivity.this, ScoreTableActivity.class);
 //        startActivity(intent);
+
+//        //另一种实现方法，也不可行
+//        while(true){
+//            if(mGameView.gameOverFlag==true){
+//                Intent intent = new Intent();
+//                intent.setClass(EasyGameActivity.this, ScoreTableActivity.class);
+//                startActivity(intent);
+//            }
+//        }
     }
 
 

@@ -1,5 +1,8 @@
 package com.example.testpro.user_dao;
 
+import android.content.Context;
+import android.os.Environment;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -13,11 +16,14 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private List<User> users;
-    public static String fileName;
+
+
+    public static String fileName="datum.dat";
 
     public UserDaoImpl() {
         users = new ArrayList<>();
         try {
+
             File f = new File(fileName);
             InputStream in = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(in);

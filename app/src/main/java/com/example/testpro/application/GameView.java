@@ -8,6 +8,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -21,6 +22,7 @@ import com.example.testpro.aircraft.BossEnemy;
 import com.example.testpro.aircraft.EliteEnemy;
 import com.example.testpro.aircraft.HeroAircraft;
 import com.example.testpro.aircraft.MobEnemy;
+import com.example.testpro.application.EasyGame.EasyGameActivity;
 import com.example.testpro.basic.AbstractFlyingObject;
 import com.example.testpro.bullet.BaseBullet;
 import com.example.testpro.bullet.EnemyBullet;
@@ -191,8 +193,13 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 //                }
                 System.out.println("Game Over!");
                 gameOverFlag = true;
-//                synchronized (Main.panelLock) {
-//                    Main.panelLock.notify();
+
+                Intent intent = new Intent(this.getContext(),InputActivity.class);
+                this.getContext().startActivity(intent);
+//                Log.i("gameview","hello");
+//                Log.i("gameview",this.getContext().toString());
+//                synchronized (EasyGameActivity.GAME_LOCK) {
+//                    EasyGameActivity.GAME_LOCK.notify();
 //                }
             }
 
