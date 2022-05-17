@@ -1,13 +1,17 @@
 package com.example.testpro.application;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.media.MediaPlayer;
+import android.os.IBinder;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
@@ -87,11 +91,15 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     protected int bossScoreThreshold = 800 ;
     protected boolean bossDied = true;
     protected boolean bossHappened = false;
-    protected MusicService musicService;
 //    protected MusicThread musicThread;
     protected int lastScore;
     protected int cycleTimeFlag=0;
 
+    //音效
+    protected MusicService musicService;
+    public MusicService.MyBinder myBinder;
+    private Connect conn;
+    private Intent intent;
 
     public GameView(Context context) {
 
@@ -105,18 +113,39 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         loading_img();//加载图片
         x = MainActivity.screenWidth / 2;
         y = MainActivity.screenHeight - ImageManager.HERO_IMAGE.getHeight();
+
         //Scheduled 线程池，用于定时任务调度
         executorService = new ScheduledThreadPoolExecutor(1);
 
         heroAircraft = HeroAircraft.getHeroAircraft();
-
         enemyAircrafts = new LinkedList<>();
         heroBullets = new LinkedList<>();
         enemyBullets = new LinkedList<>();
         props = new LinkedList<>();
 
+//        //音效
+//        Log.i("music demo","bind service");
+//        conn = new Connect();
+//        intent = new Intent(this,MusicService.class);
+//        bindService(intent,conn, Context.BIND_AUTO_CREATE);
 
     }
+
+    class Connect implements ServiceConnection {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service){
+            Log.i("music demo","Service Connnected");
+            myBinder = (MusicService.MyBinder)service;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName componentName) {
+
+        }
+    }
+
+
+
 
     @Override
     public void run () {
@@ -167,18 +196,9 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             // 后处理
             postProcessAction();
 
-            //绘制界面
+            //每个时刻重新绘制界面
             draw();
 
-//          每个时刻重绘界面
-//            synchronized (mSurfaceHolder) {
-//                draw();
-//            }
-//            try {
-//                Thread.sleep(200);
-//            } catch (Exception e) {
-//
-//            }
 
             // 游戏结束检查
             if (heroAircraft.getHp() <= 0) {
@@ -244,38 +264,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     public abstract void enemyProduce();
 
-//    public void enemyProduce(){
-//        double pro = Math.random();
-//        enemyMaxNumber = 5;
-//
-//        //随机生成精英机和普通机
-//        if (enemyAircrafts.size() < enemyMaxNumber) {
-//
-//            if(pro<eliteEnemyCreatePro){
-//                enemyFactory = new EliteFactory();
-//                enemyAircraft = enemyFactory.createEnemy();
-//            }
-//            else{
-//                enemyFactory = new MobFactory();
-//                enemyAircraft = enemyFactory.createEnemy();
-//            }
-//            enemyAircrafts.add(enemyAircraft);
-//        }
-//        if (createBoss()) {
-//            bossHappened = true;
-//            enemyFactory = new BossFactory();
-//            System.out.println("Boss敌机血量为：" + enemyFactory.getHp());
-//            //停止当前游戏bgm
-////            if (Main.musicFlag) {
-////                musicThread.stopMusic();
-////            }
-//
-//            enemyAircrafts.add(enemyFactory.createEnemy());
-//        }
-//
-//
-//    }
-
     public void aircraftsMoveAction() {
         for(int i = 0 ; i<enemyAircrafts.size();i++){
             enemyAircrafts.get(i).forward();
@@ -300,7 +288,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             return false;
         }
     }
-
 
     protected void difficultyIncrease(){
         //以boss机被消灭作为一轮的结束，每轮新开始时，游戏难度上升
@@ -361,14 +348,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-
-
-    /**
-     * 碰撞检测：
-     * 1. 敌机攻击英雄
-     * 2. 英雄攻击/撞击敌机
-     * 3. 英雄获得补给
-     */
     protected void crashCheckAction() throws InterruptedException {
         // 敌机子弹攻击英雄
         for (int i=0;i<enemyBullets.size();i++) {
@@ -460,15 +439,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         }
     }
 
-
-    /**
-     * 后处理：
-     * 1. 删除无效的子弹
-     * 2. 删除无效的敌机
-     * 3. 检查英雄机生存
-     * <p>
-     * 无效的原因可能是撞击或者飞出边界
-     */
     public void postProcessAction() {
         enemyBullets.removeIf(AbstractFlyingObject::notValid);
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);

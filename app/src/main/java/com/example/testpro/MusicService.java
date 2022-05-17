@@ -2,8 +2,11 @@ package com.example.testpro;
 
 import android.app.Service;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.media.SoundPool;
 import android.net.Uri;
+import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 
@@ -14,6 +17,7 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.HashMap;
 
 public class MusicService extends Service {
 
@@ -22,18 +26,22 @@ public class MusicService extends Service {
     private boolean stopFlag = false;
     private boolean isRepeat = false;
     private int filename;
+    private static  final String TAG = "MusicService";
+    private HashMap<Integer, Integer> soundID = new HashMap<Integer, Integer>();
+    private SoundPool mSoundPool;
 
     public MusicService() {
-         player = MediaPlayer.create(this,R.raw.bgm);
-//        this.filename = filename;
     }
 
     //播放音乐
     public void playMusic(){
-        player.start();
-        if(isRepeat){
-            player.isLooping();
+        if(player == null){
+            player = MediaPlayer.create(this, R.raw.bgm);
+            if(isRepeat){
+                player.setLooping(true);
+            }
         }
+        player.start();
     }
 
     public void stopMusic(){
@@ -45,14 +53,13 @@ public class MusicService extends Service {
         }
     }
 
-
     public void setRepeat(){
         this.isRepeat = true;
     }
 
-    private static final String TAG = "MusicService";
-
-
+    public int onStartCommand(Intent intent, int flags, int startId) {
+        return super.onStartCommand(intent, flags, startId);
+    }
 
 //    public int onStartCommand(Intent intent, int flags, int startId) {
 //        Log.i(TAG, "==== MusicService onStartCommand ===");
@@ -69,30 +76,42 @@ public class MusicService extends Service {
 //
 //    }
 
-
-
-
-
-
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-            Log.i(TAG, "==== MusicService onCreate ===");
-    }
-    @Override
-
-    public IBinder onBind(Intent intent) {
-        // TODO: Return the communication channel to the service.
-        throw new UnsupportedOperationException("Not yet implemented");
-    }
-
     @Override
     public void onDestroy() {
         super.onDestroy();
         stopMusic();
     }
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "==== MusicService onCreate ===");
+        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+        soundID.put(1, mSoundPool.load(this, R.raw.bullet_hit, 1));
+        soundID.put(2, mSoundPool.load(this, R.raw.game_over, 1));
+    }
+
+    @Override
+    public IBinder onBind(Intent intent){
+        playMusic();
+        return new MyBinder();
+    }
+
+    public class MyBinder extends Binder {
+
+        public void playBullet(){
+
+            mSoundPool.play(soundID.get(1), 1, 1, 0,0,1);
+        }
+
+        public void playGameOver(){
+
+            mSoundPool.play(soundID.get(2), 1, 1, 0, 0, 1);
+        }
+    }
+
+
 
 
 }
