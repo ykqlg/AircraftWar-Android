@@ -25,14 +25,14 @@ public class UserDaoImpl implements UserDao {
         users = new ArrayList<>();
         try {
 
-            File f = new File(fileName);
+            File f = new File(Environment.getExternalStorageDirectory(),fileName);
             InputStream in = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(in);
             this.users = (List<User>)ois.readObject();
             ois.close();
             in.close();
         } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
 
     }
