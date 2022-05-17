@@ -16,15 +16,30 @@
         <activity
             android:name=".MainActivity"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity
+            android:name=".application.ScoreTableActivity"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+        <activity android:name=".application.InputActivity" />
         <activity android:name=".application.EasyGame.EasyGameActivity" />
         <activity android:name=".application.MediumGame.MediumGameActivity" />
         <activity android:name=".application.HardGame.HardGameActivity" />
+
     </application>
 
 </manifest>

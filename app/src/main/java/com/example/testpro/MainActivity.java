@@ -13,6 +13,7 @@ import android.widget.Switch;
 import com.example.testpro.application.EasyGame.EasyGameActivity;
 import com.example.testpro.application.HardGame.HardGameActivity;
 import com.example.testpro.application.MediumGame.MediumGameActivity;
+import com.example.testpro.application.ScoreTableActivity;
 
 public class MainActivity extends AppCompatActivity {
 
