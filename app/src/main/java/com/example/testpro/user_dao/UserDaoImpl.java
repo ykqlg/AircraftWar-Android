@@ -1,7 +1,12 @@
 package com.example.testpro.user_dao;
 
+import android.Manifest;
 import android.content.Context;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Environment;
+
+import androidx.core.app.ActivityCompat;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,22 +21,24 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private List<User> users;
-
-
     public static String fileName="datum.dat";
+
 
     public UserDaoImpl() {
         users = new ArrayList<>();
         try {
 
-            File f = new File(fileName);
+            File f = new File(Environment.getExternalStorageDirectory(),fileName);
+//            if(f==null){
+//                f.createNewFile();
+//            }
             InputStream in = new FileInputStream(f);
             ObjectInputStream ois = new ObjectInputStream(in);
             this.users = (List<User>)ois.readObject();
             ois.close();
             in.close();
         } catch (IOException | ClassNotFoundException e) {
-//            e.printStackTrace();
+            e.printStackTrace();
         }
 
     }
