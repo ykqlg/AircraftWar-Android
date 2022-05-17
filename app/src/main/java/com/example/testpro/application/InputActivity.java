@@ -2,6 +2,7 @@ package com.example.testpro.application;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -11,7 +12,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testpro.MainActivity;
 import com.example.testpro.R;
-import com.example.testpro.application.EasyGame.EasyGameActivity;
 import com.example.testpro.user_dao.User;
 import com.example.testpro.user_dao.UserDao;
 import com.example.testpro.user_dao.UserDaoImpl;
@@ -38,7 +38,10 @@ public class InputActivity extends AppCompatActivity {
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                System.out.println("name:"+user.getUserName()+",score:"+user.getUserScore()+",time:"+user.getUserTime());
+                Log.i("table","name:"+user.getUserName()+",s" +
+                        "core:"+user.getUserScore()+",time:"+user.getUserTime());
+//                System.out.println("name:"+user.getUserName()+",s" +
+//                        "core:"+user.getUserScore()+",time:"+user.getUserTime());
                 System.out.println(user);
                 System.out.println(userDao);
 

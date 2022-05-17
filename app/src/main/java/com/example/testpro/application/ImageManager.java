@@ -26,8 +26,6 @@ public class ImageManager {
     public static Bitmap BULLET_PROP_IMAGE;
     public static Bitmap BACKGROUND_IMAGE;
     public static Bitmap BACKGROUND1_IMAGE;
-    public static Bitmap BACKGROUND2_IMAGE;
-    public static Bitmap BACKGROUND3_IMAGE;
 
 
 

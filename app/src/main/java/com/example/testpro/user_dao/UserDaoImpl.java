@@ -2,6 +2,7 @@ package com.example.testpro.user_dao;
 
 import android.content.Context;
 import android.os.Environment;
+import android.util.Log;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -59,7 +60,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void doAdd(User user) throws IOException {
         users.add(user);
+        Log.i("table","[");
+
         ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        Log.i("table","]");
         oos.writeObject(users);
         oos.close();
     }

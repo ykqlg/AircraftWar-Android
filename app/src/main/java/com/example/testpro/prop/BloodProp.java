@@ -1,6 +1,7 @@
 package com.example.testpro.prop;
 
 import com.example.testpro.aircraft.AbstractAircraft;
+import com.example.testpro.application.GameView;
 import com.example.testpro.basic.AbstractFlyingObject;
 
 public class BloodProp extends AbstractProp {
@@ -15,6 +16,7 @@ public class BloodProp extends AbstractProp {
 //        }
 //        System.out.println("HpSupply active!");
 
+        GameView.myBinder.playGetSupply();
         abstractAircraft.increaseHp(150);
     }
 

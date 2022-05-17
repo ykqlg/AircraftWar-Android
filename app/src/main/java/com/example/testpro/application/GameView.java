@@ -37,6 +37,7 @@ import com.example.testpro.prop.AbstractProp;
 import com.example.testpro.prop.BloodProp;
 import com.example.testpro.prop.BombProp;
 import com.example.testpro.prop.BulletProp;
+import com.google.androidgamesdk.GameActivity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -84,7 +85,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
      */
-    public int cycleDuration = 400;
+    public int cycleDuration = 250;
     public int cycleTime = 0;
 
     public boolean gameOverFlag = false;
@@ -94,10 +95,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 //    protected MusicThread musicThread;
     protected int lastScore;
     protected int cycleTimeFlag=0;
+    public static int mode=1;
 
     //音效
     protected MusicService musicService;
-    public MusicService.MyBinder myBinder;
+    public static MusicService.MyBinder myBinder;
     private Connect conn;
     private Intent intent;
 
@@ -123,24 +125,28 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         enemyBullets = new LinkedList<>();
         props = new LinkedList<>();
 
-//        //音效
-//        Log.i("music demo","bind service");
-//        conn = new Connect();
-//        intent = new Intent(this,MusicService.class);
-//        bindService(intent,conn, Context.BIND_AUTO_CREATE);
+        //音效
 
+        Log.i("music demo","bind service");
+        conn = new Connect();
+        intent = new Intent(this.getContext(),MusicService.class);
+        this.getContext().bindService(intent,conn, Context.BIND_AUTO_CREATE);
     }
 
     class Connect implements ServiceConnection {
+
         @Override
         public void onServiceConnected(ComponentName name, IBinder service){
-            Log.i("music demo","Service Connnected");
+            Log.i("music demo","Service Connnected!!!!!!");
             myBinder = (MusicService.MyBinder)service;
+            if(MainActivity.musicFlag){
+                myBinder.playBGM();
+            }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-
+            Log.i("music demo","Service Disconnnected!!!!!!");
         }
     }
 
@@ -156,11 +162,12 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
 //        if(MainActivity.musicFlag){
 //
-//            System.out.println("here?");
-////            musicService = new MusicService(R.raw.bgm);
-//            musicService = new MusicService();
-//            musicService.setRepeat();
-//            musicService.playMusic();
+//            myBinder.playBullet();
+////            System.out.println("here?");
+//////            musicService = new MusicService(R.raw.bgm);
+////            musicService = new MusicService();
+////            musicService.setRepeat();
+////            musicService.playMusic();
 //        }
 
         Runnable task = () -> {
@@ -175,7 +182,8 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 shootAction();
             }
             //这边的x，y一开始默认都为0
-            heroAircraft.setLocation(x, y);
+
+            heroAircraft.setLocation(x, y-ImageManager.HERO_IMAGE.getHeight()/2);
 
             // 子弹移动
             bulletsMoveAction();
@@ -205,12 +213,16 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 // 游戏结束
                 executorService.shutdown();
 
+                myBinder.playGameOver();
 //                if(Main.musicFlag){
 //                    new MusicThread("src/videos/game_over.wav").start();
 //                    musicThread.stopMusic();
 //                }
                 System.out.println("Game Over!");
                 gameOverFlag = true;
+                Intent intent = new Intent(this.getContext(),InputActivity.class);
+                this.getContext().startActivity(intent);
+                this.getContext().unbindService(conn);
 //                synchronized (Main.panelLock) {
 //                    Main.panelLock.notify();
 //                }
@@ -380,7 +392,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                     // 敌机撞击到英雄机子弹
                     // 敌机损失一定生命值
                     enemyAircraft.decreaseHp(bullet.getPower());
-//                    bullet.musicEffect();
+                    bullet.musicEffect();
                     bullet.vanish();
 
                     if (enemyAircraft.notValid()) {
@@ -396,11 +408,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                             score = score+50;
                             lastScore = score;//重置boss生成阈值
                             bossDied = true;//标记boss已死亡
-//                            if(Main.musicFlag){
-//                                System.out.println("why");
-//                                musicThread = new MusicThread("src/videos/bgm.wav");
-//                                musicThread.start();
-//                            }
                             enemyAircraft.vanish();
                             ((BossEnemy) enemyAircraft).generateProp(props);
                         }
@@ -456,7 +463,15 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
     public void loading_img() {
 
-        ImageManager.BACKGROUND1_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        if(mode == 1){
+            ImageManager.BACKGROUND_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg);
+        }
+        else if(mode == 2){
+            ImageManager.BACKGROUND_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg3);
+        }
+        else if(mode == 3){
+            ImageManager.BACKGROUND_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.bg4);
+        }
         ImageManager.HERO_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.hero);
         ImageManager.MOB_ENEMY_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.mob);
         ImageManager.BOSS_ENEMY_IMAGE = BitmapFactory.decodeResource(getResources(), R.drawable.boss);
@@ -491,10 +506,10 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         //绘制敌机
         paintImageWithPositionRevised(canvas,enemyAircrafts);
 
-        //绘制英雄机
+//        绘制英雄机
         canvas.drawBitmap(ImageManager.HERO_IMAGE,
                 heroAircraft.getLocationX()-ImageManager.HERO_IMAGE.getWidth() / 2,
-                heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight() / 2,mPaint);
+                heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight()/2,mPaint);
 
         //绘制得分和生命值
                 paintScoreAndLife(canvas);
@@ -525,8 +540,8 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         if (mSurfaceHolder == null || canvas == null) {
             return;
         }
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND1_IMAGE.getHeight(),mPaint);
-        canvas.drawBitmap(ImageManager.BACKGROUND1_IMAGE,0,this.backGroundTop,mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND_IMAGE,0,this.backGroundTop-ImageManager.BACKGROUND_IMAGE.getHeight(),mPaint);
+        canvas.drawBitmap(ImageManager.BACKGROUND_IMAGE,0,this.backGroundTop,mPaint);
         this.backGroundTop += 1;
         if(this.backGroundTop >= screenHeight){
             this.backGroundTop = this.backGroundTop-screenHeight;

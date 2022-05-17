@@ -6,13 +6,13 @@ import android.content.Intent;
 
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Switch;
 
-import com.example.testpro.application.EasyGame.EasyGameActivity;
-import com.example.testpro.application.HardGame.HardGameActivity;
-import com.example.testpro.application.MediumGame.MediumGameActivity;
+import com.example.testpro.application.GameActivity;
+import com.example.testpro.application.GameView;
 import com.example.testpro.application.ScoreTableActivity;
 
 public class MainActivity extends AppCompatActivity {
@@ -35,9 +35,12 @@ public class MainActivity extends AppCompatActivity {
                 if(soundSwitch.isChecked()==true){
                     musicFlag = true;
                 }
+                GameView.mode = 1;
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, EasyGameActivity.class);
+                intent.setClass(MainActivity.this, GameActivity.class);
                 startActivity(intent);
+
+
             }
         });
 
@@ -48,8 +51,10 @@ public class MainActivity extends AppCompatActivity {
                 if(soundSwitch.isChecked()==true){
                     musicFlag = true;
                 }
+                GameView.mode = 2;
+
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, MediumGameActivity.class);
+                intent.setClass(MainActivity.this, GameActivity.class);
                 startActivity(intent);
             }
         });
@@ -61,8 +66,10 @@ public class MainActivity extends AppCompatActivity {
                 if(soundSwitch.isChecked()==true){
                     musicFlag = true;
                 }
+                GameView.mode = 3;
+
                 Intent intent = new Intent();
-                intent.setClass(MainActivity.this, HardGameActivity.class);
+                intent.setClass(MainActivity.this, GameActivity.class);
                 startActivity(intent);
             }
         });

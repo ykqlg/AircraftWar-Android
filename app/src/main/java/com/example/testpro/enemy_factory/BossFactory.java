@@ -3,6 +3,8 @@ package com.example.testpro.enemy_factory;
 import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.aircraft.BossEnemy;
+import com.example.testpro.application.GameActivity;
+import com.example.testpro.application.GameView;
 import com.example.testpro.application.ImageManager;
 
 import java.util.Random;
@@ -30,6 +32,7 @@ public class BossFactory implements EnemyFactory{
 
             currentSpeed = (-1)*speedX;
         }
+
         return new BossEnemy(this.locationX, this.locationY,currentSpeed, this.speedY,this.hp);
 
     }

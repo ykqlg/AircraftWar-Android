@@ -1,6 +1,7 @@
 package com.example.testpro.aircraft;
 
 import com.example.testpro.MainActivity;
+import com.example.testpro.application.GameView;
 import com.example.testpro.bullet.BaseBullet;
 import com.example.testpro.prop.AbstractProp;
 import com.example.testpro.prop_factory.BloodPropFactory;
@@ -18,10 +19,7 @@ public class BossEnemy extends AbstractAircraft {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy scatterBullet = new ScatterBullet();
         this.setStrategy(scatterBullet);
-//        if(Main.musicFlag){
-//            musicThread = new MusicThread("src/videos/bgm_boss.wav");
-//            musicThread.start();
-//        }
+        GameView.myBinder.playBossMusic();
     }
 
     /** 攻击方式 */
@@ -59,9 +57,7 @@ public class BossEnemy extends AbstractAircraft {
     @Override
     public void vanish() {
         isValid = false;
-//        if(Main.musicFlag){
-//            musicThread.stopMusic();
-//        }
+        GameView.myBinder.playBGM();
     }
 
     @Override
@@ -93,17 +89,17 @@ public class BossEnemy extends AbstractAircraft {
 
             if(pro>=0 && pro<=2){
                 propFactory = new BloodPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 10) ;
+                prop = propFactory.generateProp(x, y, 0, 4) ;
                 props.add(prop);
             }
             else if(pro>=3 && pro<=5){
                 propFactory = new BombPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 10) ;
+                prop = propFactory.generateProp(x, y, 0, 4) ;
                 props.add(prop);
             }
             else if(pro>=6 && pro<=8){
                 propFactory = new BulletPropFactory();
-                prop = propFactory.generateProp(x, y, 0, 10) ;
+                prop = propFactory.generateProp(x, y, 0, 4) ;
                 props.add(prop);
             }
             else{

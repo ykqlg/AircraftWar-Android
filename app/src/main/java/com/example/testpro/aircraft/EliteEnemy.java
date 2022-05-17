@@ -82,17 +82,17 @@ public class EliteEnemy extends AbstractAircraft {
 //        int pro = 4;
         if(pro>=0 && pro<=2){
             propFactory = new BloodPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 10) ;
+            prop = propFactory.generateProp(x, y, 0, 4) ;
             props.add(prop);
         }
         else if(pro>=3 && pro<=5){
             propFactory = new BombPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 10) ;
+            prop = propFactory.generateProp(x, y, 0, 4) ;
             props.add(prop);
         }
         else if(pro>=6 && pro<=8){
             propFactory = new BulletPropFactory();
-            prop = propFactory.generateProp(x, y, 0, 10) ;
+            prop = propFactory.generateProp(x, y, 0, 4) ;
             props.add(prop);
         }
         else{

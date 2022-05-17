@@ -1,4 +1,4 @@
-package com.example.testpro.application.HardGame;
+package com.example.testpro.application;
 
 import android.content.Context;
 

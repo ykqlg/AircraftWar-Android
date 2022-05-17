@@ -1,4 +1,4 @@
-package com.example.testpro.application.EasyGame;
+package com.example.testpro.application;
 
 import android.content.Context;
 
@@ -8,11 +8,10 @@ import com.example.testpro.enemy_factory.EnemyFactory;
 import com.example.testpro.enemy_factory.MobFactory;
 
 public class EasyGameView extends GameView {
-    private EasyGameActivity activity;
+
 
     public EasyGameView(Context context) {
         super(context);
-        this.activity = (EasyGameActivity) context;
 
     }
 

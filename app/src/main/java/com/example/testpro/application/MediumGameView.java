@@ -1,4 +1,4 @@
-package com.example.testpro.application.MediumGame;
+package com.example.testpro.application;
 
 import android.content.Context;
 

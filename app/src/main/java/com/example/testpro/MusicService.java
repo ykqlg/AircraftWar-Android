@@ -33,13 +33,87 @@ public class MusicService extends Service {
     public MusicService() {
     }
 
-    //播放音乐
-    public void playMusic(){
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        stopMusic();
+    }
+
+
+    @Override
+    public void onCreate() {
+        super.onCreate();
+        Log.i(TAG, "==== MusicService onCreate ===");
+        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+        soundID.put(1, mSoundPool.load(this, R.raw.bullet_hit, 1));
+        soundID.put(2, mSoundPool.load(this, R.raw.game_over, 1));
+        soundID.put(3, mSoundPool.load(this, R.raw.bomb_explosion, 1));
+        soundID.put(4, mSoundPool.load(this, R.raw.bullet, 1));
+        soundID.put(5, mSoundPool.load(this, R.raw.get_supply, 1));
+    }
+
+    @Override
+    public IBinder onBind(Intent intent){
+//        playMusic();
+        return new MyBinder();
+    }
+
+    public class MyBinder extends Binder {
+
+        public void playBGM(){
+            BGM();
+        }
+
+        public void playBossMusic(){
+            BossMusic();
+        }
+
+        public void playBulletHit(){
+
+            mSoundPool.play(soundID.get(1), 1, 1, 0,0,1);
+        }
+
+        public void playGameOver(){
+
+            mSoundPool.play(soundID.get(2), 1, 1, 0, 0, 1);
+        }
+
+        public void playBombExplosion(){
+
+            mSoundPool.play(soundID.get(3), 1, 1, 0, 0, 1);
+        }
+
+        public void playBullet(){
+
+            mSoundPool.play(soundID.get(4), 1, 1, 0, 0, 1);
+        }
+
+        public void playGetSupply(){
+
+            mSoundPool.play(soundID.get(5), 1, 1, 0, 0, 1);
+        }
+
+
+    }
+
+
+    //播放BGM
+    public void BGM(){
+        stopMusic();
         if(player == null){
             player = MediaPlayer.create(this, R.raw.bgm);
-            if(isRepeat){
-                player.setLooping(true);
-            }
+//            player.setVolume(100,100);
+            player.setLooping(true);
+        }
+        player.start();
+    }
+
+    //播放Boss音乐
+    public void BossMusic(){
+        stopMusic();
+        if(player == null){
+            player = MediaPlayer.create(this, R.raw.bgm_boss);
+            player.setLooping(true);
         }
         player.start();
     }
@@ -60,58 +134,6 @@ public class MusicService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         return super.onStartCommand(intent, flags, startId);
     }
-
-//    public int onStartCommand(Intent intent, int flags, int startId) {
-//        Log.i(TAG, "==== MusicService onStartCommand ===");
-//        String action = intent.getStringExtra("action");
-//
-//        if ("play".equals(action)) {
-//        //播放
-//            playMusic();
-//        } else if ("stop".equals(action)) {
-//        //停止
-//            stopMusic();
-//        }
-//        return super.onStartCommand(intent, flags, startId);
-//
-//    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        stopMusic();
-    }
-
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        Log.i(TAG, "==== MusicService onCreate ===");
-        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
-        soundID.put(1, mSoundPool.load(this, R.raw.bullet_hit, 1));
-        soundID.put(2, mSoundPool.load(this, R.raw.game_over, 1));
-    }
-
-    @Override
-    public IBinder onBind(Intent intent){
-        playMusic();
-        return new MyBinder();
-    }
-
-    public class MyBinder extends Binder {
-
-        public void playBullet(){
-
-            mSoundPool.play(soundID.get(1), 1, 1, 0,0,1);
-        }
-
-        public void playGameOver(){
-
-            mSoundPool.play(soundID.get(2), 1, 1, 0, 0, 1);
-        }
-    }
-
-
 
 
 }
