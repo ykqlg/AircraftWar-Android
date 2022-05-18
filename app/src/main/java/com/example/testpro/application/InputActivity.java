@@ -31,19 +31,19 @@ public class InputActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 playerName = nameText.getText().toString();
-                UserDao userDao=new UserDaoImpl();
+                UserDao userDao=new UserDaoImpl(InputActivity.this);
                 User user=new User(GameView.score,playerName);
                 try {
                     userDao.doAdd(user);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
-                Log.i("table","name:"+user.getUserName()+",s" +
-                        "core:"+user.getUserScore()+",time:"+user.getUserTime());
+//                Log.i("table","name:"+user.getUserName()+",s" +
+//                        "core:"+user.getUserScore()+",time:"+user.getUserTime());
 //                System.out.println("name:"+user.getUserName()+",s" +
 //                        "core:"+user.getUserScore()+",time:"+user.getUserTime());
-                System.out.println(user);
-                System.out.println(userDao);
+//                System.out.println(user);
+//                System.out.println(userDao);
 
                 //跳转到得分排行榜
                 Intent intent = new Intent();

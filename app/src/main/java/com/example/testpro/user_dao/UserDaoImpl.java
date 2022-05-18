@@ -17,20 +17,30 @@ import java.util.List;
 
 public class UserDaoImpl implements UserDao {
     private List<User> users;
+    Context context;
 
 
-    public static String fileName="datum.dat";
+    public static String fileName="datum.txt";
 
-    public UserDaoImpl() {
+    public UserDaoImpl(Context context) {
+        this.context=context;
+
         users = new ArrayList<>();
         try {
 
-            File f = new File(Environment.getExternalStorageDirectory(),fileName);
-            InputStream in = new FileInputStream(f);
-            ObjectInputStream ois = new ObjectInputStream(in);
+//            File f = new File(Environment.getExternalStorageDirectory(),fileName);
+//            InputStream in = new FileInputStream(f);
+            FileInputStream fis = context.openFileInput(fileName);
+
+//            byte[]bytes = new byte[fis.available()];
+//            fis.read(bytes);
+//            fis.close();
+//            System.out.println(bytes);
+
+            ObjectInputStream ois = new ObjectInputStream(fis);
             this.users = (List<User>)ois.readObject();
             ois.close();
-            in.close();
+            fis.close();
         } catch (IOException | ClassNotFoundException e) {
             e.printStackTrace();
         }
@@ -60,10 +70,10 @@ public class UserDaoImpl implements UserDao {
     @Override
     public void doAdd(User user) throws IOException {
         users.add(user);
-        Log.i("table","[");
 
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
-        Log.i("table","]");
+        FileOutputStream fos = context.openFileOutput(fileName,Context.MODE_PRIVATE);
+
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(users);
         oos.close();
     }
@@ -77,7 +87,8 @@ public class UserDaoImpl implements UserDao {
                 users.remove(targetUser);
             }
         }
-        ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(fileName));
+        FileOutputStream fos = context.openFileOutput(fileName,Context.MODE_PRIVATE);
+        ObjectOutputStream oos = new ObjectOutputStream(fos);
         oos.writeObject(users);
         oos.close();
     }
