@@ -8,32 +8,60 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testpro.MainActivity;
 import com.example.testpro.R;
+import com.example.testpro.user_dao.User;
 import com.example.testpro.user_dao.UserDao;
 import com.example.testpro.user_dao.UserDaoImpl;
 
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.ListIterator;
 
 public class ScoreTableActivity extends AppCompatActivity {
 
     ListView scoreTable;
+
+    private int id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+//        int id = 0;
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scoretable);
         scoreTable=(ListView) findViewById(R.id.scoreTable);
         //用于测试
         UserDao userDao=new UserDaoImpl(this);
-        String[] tableData = new String[userDao.getAllUsers().size()];
-        for(int i=0;i<userDao.getAllUsers().size();i++){
-            tableData[i]= String.valueOf(userDao.getAllUsers().get(i).getUserRank())+" "
-                    +userDao.getAllUsers().get(i).getUserName()+" "
-                    +String.valueOf(userDao.getAllUsers().get(i).getUserScore())+" "
-                    +String.valueOf(userDao.getAllUsers().get(i).getUserTime());
+        List<User> users = userDao.getAllUsers();
+        ArrayList<String>tableData = new ArrayList<>();
+
+//        String[] tableData = new String[userDao.getAllUsers().size()];
+//        for(int i=0;i<users.size();i++){
+//
+////            tableData[i]= String.valueOf(userDao.getAllUsers().get(i).getUserRank())+" "
+////                    +userDao.getAllUsers().get(i).getUserName()+" "
+////                    +String.valueOf(userDao.getAllUsers().get(i).getUserScore())+" "
+////                    +String.valueOf(userDao.getAllUsers().get(i).getUserTime());
+//            String message = String.valueOf(userDao.getAllUsers().get(i).getUserRank())+" "
+//                    +userDao.getAllUsers().get(i).getUserName()+" "
+//                    +String.valueOf(userDao.getAllUsers().get(i).getUserScore())+" "
+//                    +String.valueOf(userDao.getAllUsers().get(i).getUserTime());
+//            tableData.add(message);
+//        }
+        for(User user:users){
+            String message = user.getUserRank()+" "
+                    +user.getUserName()+" "
+                    +user.getUserScore()+" "
+                    +user.getUserTime();
+            tableData.add(message);
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,tableData);
         scoreTable.setAdapter(arrayAdapter);
@@ -42,14 +70,17 @@ public class ScoreTableActivity extends AppCompatActivity {
         scoreTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                try {
-                    userDao.doDelete(userDao.getAllUsers().get(i).getUserRank());
+                id = (int)l;
 
-//                    arrayAdapter.notifyDataSetChanged();
-//                    scoreTable.invalidate();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    id = (int)l;
+////                    userDao.doDelete(id);
+//
+////                    arrayAdapter.notifyDataSetChanged();
+////                    scoreTable.invalidate();
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
             }
         });
 
@@ -84,10 +115,12 @@ public class ScoreTableActivity extends AppCompatActivity {
 //                    }
 //                }
                 try {
+//                    int id = 1;
 //                    scoreTable.removeViewAt(1);
-                    userDao.doDelete(userDao.getAllUsers().get(0).getUserRank());
+                    userDao.doDelete(id);
+                    tableData.remove(id);
 
-//                    arrayAdapter.notifyDataSetChanged();
+                    arrayAdapter.notifyDataSetChanged();
 //                    scoreTable.invalidate();
                 } catch (IOException e) {
                     e.printStackTrace();
