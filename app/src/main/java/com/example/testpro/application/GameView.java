@@ -174,7 +174,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             }
             //这边的x，y一开始默认都为0
 
-            heroAircraft.setLocation(x, y-ImageManager.HERO_IMAGE.getHeight()/2);
+            heroAircraft.setLocation(x, y-ImageManager.HERO_IMAGE.getHeight()*1.5f);
 
             // 子弹移动
             bulletsMoveAction();
@@ -542,10 +542,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         int y = 200;
         mPaint.setColor(Color.RED);
         mPaint.setTextSize((float) 100.0);
+        mPaint.setFakeBoldText(true);
 //        g.setFont(new Font("SansSerif", Font.BOLD, 22));
         canvas.drawText("SCORE:" + this.score,x,y,mPaint);
 //        g.drawString("SCORE:" + this.score, x, y);
-        y = y + 300;
+        y = y + 150;
         canvas.drawText("LIFE:" + this.heroAircraft.getHp(),x,y,mPaint);
 //        g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
     }
