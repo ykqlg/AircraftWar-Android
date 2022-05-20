@@ -542,6 +542,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         int y = 200;
         mPaint.setColor(Color.RED);
         mPaint.setTextSize((float) 100.0);
+
 //        g.setFont(new Font("SansSerif", Font.BOLD, 22));
         canvas.drawText("SCORE:" + this.score,x,y,mPaint);
 //        g.drawString("SCORE:" + this.score, x, y);
