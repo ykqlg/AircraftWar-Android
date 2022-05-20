@@ -17,9 +17,6 @@ public class MusicService extends Service {
 
     //创建播放器对象
     private MediaPlayer player;
-    private boolean stopFlag = false;
-    private boolean isRepeat = false;
-    private int filename;
     private static  final String TAG = "MusicService";
     private HashMap<Integer, Integer> soundID = new HashMap<Integer, Integer>();
     private SoundPool mSoundPool;
@@ -120,10 +117,6 @@ public class MusicService extends Service {
             player.release();//释放
             player = null;
         }
-    }
-
-    public void setRepeat(){
-        this.isRepeat = true;
     }
 
     public int onStartCommand(Intent intent, int flags, int startId) {
