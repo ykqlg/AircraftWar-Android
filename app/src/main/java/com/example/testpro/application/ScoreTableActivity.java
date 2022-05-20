@@ -31,6 +31,7 @@ public class ScoreTableActivity extends AppCompatActivity {
     ListView scoreTable;
 
     private int id;
+    private List<User> users;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 //        int id = 0;
@@ -40,7 +41,7 @@ public class ScoreTableActivity extends AppCompatActivity {
         scoreTable=(ListView) findViewById(R.id.scoreTable);
         //用于测试
         UserDao userDao=new UserDaoImpl(this);
-        List<User> users = userDao.getAllUsers();
+        users = userDao.getAllUsers();
         ArrayList<String>tableData = new ArrayList<>();
 
 //        String[] tableData = new String[userDao.getAllUsers().size()];
@@ -117,8 +118,21 @@ public class ScoreTableActivity extends AppCompatActivity {
                 try {
 //                    int id = 1;
 //                    scoreTable.removeViewAt(1);
-                    userDao.doDelete(id);
+                    userDao.doDelete(id+1);
                     tableData.remove(id);
+                    users = userDao.getAllUsers();
+                    for(int i = users.size()-1;i>-1;i--){
+                        tableData.remove(i);
+
+                    }
+                    for(User user:users){
+                        String message = user.getUserRank()+" "
+                                +user.getUserName()+" "
+                                +user.getUserScore()+" "
+                                +user.getUserTime();
+                        tableData.add(message);
+                    }
+
 
                     arrayAdapter.notifyDataSetChanged();
 //                    scoreTable.invalidate();
