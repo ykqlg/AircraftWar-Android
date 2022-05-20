@@ -141,6 +141,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             myBinder = (MusicService.MyBinder)service;
             if(MainActivity.musicFlag){
                 myBinder.playBGM();
+//                myBinder.playBossMusic();
             }
         }
 
@@ -159,16 +160,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
     public void action(){
-
-//        if(MainActivity.musicFlag){
-//
-//            myBinder.playBullet();
-////            System.out.println("here?");
-//////            musicService = new MusicService(R.raw.bgm);
-////            musicService = new MusicService();
-////            musicService.setRepeat();
-////            musicService.playMusic();
-//        }
 
         Runnable task = () -> {
 //            time += timeInterval;
@@ -213,19 +204,16 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 // 游戏结束
                 executorService.shutdown();
 
-                myBinder.playGameOver();
-//                if(Main.musicFlag){
-//                    new MusicThread("src/videos/game_over.wav").start();
-//                    musicThread.stopMusic();
-//                }
+                //游戏结束音效
+                if(MainActivity.musicFlag){
+                    myBinder.playGameOver();
                 System.out.println("Game Over!");
+                }
                 gameOverFlag = true;
                 Intent intent = new Intent(this.getContext(),InputActivity.class);
                 this.getContext().startActivity(intent);
                 this.getContext().unbindService(conn);
-//                synchronized (Main.panelLock) {
-//                    Main.panelLock.notify();
-//                }
+
             }
 
         };

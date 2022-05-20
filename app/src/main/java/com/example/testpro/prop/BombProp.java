@@ -1,5 +1,6 @@
 package com.example.testpro.prop;
 
+import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.application.GameView;
 import com.example.testpro.basic.AbstractFlyingObject;
@@ -42,7 +43,9 @@ public class BombProp extends AbstractProp {
 //            new MusicThread("src/videos/bomb_explosion.wav").start();
 //        }
 //        System.out.println("BombSupply active!");
+        if(MainActivity.musicFlag){
         GameView.myBinder.playBombExplosion();
+        }
         this.notifyAllSubscribe();
     }
 }

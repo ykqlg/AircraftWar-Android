@@ -1,5 +1,6 @@
 package com.example.testpro.bullet;
 
+import com.example.testpro.MainActivity;
 import com.example.testpro.application.GameView;
 
 public class HeroBullet extends BaseBullet{
@@ -18,7 +19,10 @@ public class HeroBullet extends BaseBullet{
 //            musicThread = new MusicThread("src/videos/bullet_hit.wav");
 //            musicThread.start();
 //        }
+        if(MainActivity.musicFlag){
         GameView.myBinder.playBulletHit();
+
+        }
     }
 
     @Override

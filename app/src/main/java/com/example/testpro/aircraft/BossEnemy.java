@@ -19,7 +19,9 @@ public class BossEnemy extends AbstractAircraft {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy scatterBullet = new ScatterBullet();
         this.setStrategy(scatterBullet);
-        GameView.myBinder.playBossMusic();
+        if(MainActivity.musicFlag) {
+            GameView.myBinder.playBossMusic();
+        }
     }
 
     /** 攻击方式 */
@@ -57,7 +59,9 @@ public class BossEnemy extends AbstractAircraft {
     @Override
     public void vanish() {
         isValid = false;
-        GameView.myBinder.playBGM();
+        if(MainActivity.musicFlag) {
+            GameView.myBinder.playBGM();
+        }
     }
 
     @Override

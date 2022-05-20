@@ -1,5 +1,6 @@
 package com.example.testpro.prop;
 
+import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.application.GameView;
 import com.example.testpro.basic.AbstractFlyingObject;
@@ -22,7 +23,9 @@ public class BulletProp extends AbstractProp{
 //            new MusicThread("src/videos/bullet.wav").start();
 //        }
 //        System.out.println("FireSupply active!");
+        if(MainActivity.musicFlag){
         GameView.myBinder.playBullet();
+        }
         //如果在火力道具有效期间，每触碰一次火力道具，子弹数目加1，有上限
         if(abstractAircraft.getShootNum()<maxShootNum){
             abstractAircraft.increaseShootNum();

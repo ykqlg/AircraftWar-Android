@@ -96,7 +96,8 @@ public class MusicService extends Service {
         stopMusic();
         if(player == null){
             player = MediaPlayer.create(this, R.raw.bgm);
-//            player.setVolume(100,100);
+//            player.setAudioStreamType(AudioManager.STREAM_NOTIFICATION);
+//            player.setVolume(1.0f,1.0f);
             player.setLooping(true);
         }
         player.start();
