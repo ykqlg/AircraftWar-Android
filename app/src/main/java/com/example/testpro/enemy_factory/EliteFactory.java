@@ -22,7 +22,7 @@ public class EliteFactory implements EnemyFactory {
     private int speedX = 3;
     private static int speedY = 12;
     private int baseSpeed = 1;
-    private static int hp = 30;
+    private static int hp = 50;
     private int baseHp = 30;
 
     @Override

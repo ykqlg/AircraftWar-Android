@@ -35,7 +35,8 @@ public class MusicService extends Service {
     public void onCreate() {
         super.onCreate();
         Log.i(TAG, "==== MusicService onCreate ===");
-        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
+        mSoundPool = new SoundPool.Builder().setMaxStreams(5).build();
+//        mSoundPool = new SoundPool(2, AudioManager.STREAM_SYSTEM, 5);
         soundID.put(1, mSoundPool.load(this, R.raw.bullet_hit, 1));
         soundID.put(2, mSoundPool.load(this, R.raw.game_over, 1));
         soundID.put(3, mSoundPool.load(this, R.raw.bomb_explosion, 1));
