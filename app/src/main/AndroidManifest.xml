@@ -31,6 +31,9 @@
         <activity android:name=".application.ScoreTableActivity" />
         <activity android:name=".application.InputActivity" />
         <activity android:name=".application.GameActivity" />
+        <activity android:name=".application.ModeItemActivity" />
+        <activity android:name=".application.RegisterActivity" />
+
 
     </application>
 
