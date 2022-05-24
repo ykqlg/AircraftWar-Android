@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 public class User implements Serializable {
     private String userName;
+    private String userPws;
     private int rank;
     private int score;
     private int[] time;
@@ -49,5 +50,10 @@ public class User implements Serializable {
         int hour =cal.get(Calendar.HOUR_OF_DAY);//时
         int minute=cal.get(Calendar.MINUTE);//分
         time = new int[]{month,date,hour,minute};
+    }
+
+
+    public void setUserPws(String userPws){
+        this.userPws = userPws;
     }
 }
