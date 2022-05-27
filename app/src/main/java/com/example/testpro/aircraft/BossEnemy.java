@@ -2,6 +2,7 @@ package com.example.testpro.aircraft;
 
 import com.example.testpro.MainActivity;
 import com.example.testpro.application.GameView;
+import com.example.testpro.application.ModeItemActivity;
 import com.example.testpro.bullet.BaseBullet;
 import com.example.testpro.prop.AbstractProp;
 import com.example.testpro.prop_factory.BloodPropFactory;
@@ -19,7 +20,7 @@ public class BossEnemy extends AbstractAircraft {
         super(locationX, locationY, speedX, speedY, hp);
         Strategy scatterBullet = new ScatterBullet();
         this.setStrategy(scatterBullet);
-        if(MainActivity.musicFlag) {
+        if(ModeItemActivity.musicFlag) {
             GameView.myBinder.playBossMusic();
         }
     }
@@ -59,7 +60,7 @@ public class BossEnemy extends AbstractAircraft {
     @Override
     public void vanish() {
         isValid = false;
-        if(MainActivity.musicFlag) {
+        if(ModeItemActivity.musicFlag) {
             GameView.myBinder.playBGM();
         }
     }
