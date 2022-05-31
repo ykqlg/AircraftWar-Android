@@ -139,7 +139,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         public void onServiceConnected(ComponentName name, IBinder service){
             Log.i("music demo","Service Connnected!!!!!!");
             myBinder = (MusicService.MyBinder)service;
-            if(MainActivity.musicFlag){
+            if(ModeItemActivity.musicFlag){
                 myBinder.playBGM();
 //                myBinder.playBossMusic();
             }
@@ -205,7 +205,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 executorService.shutdown();
 
                 //游戏结束音效
-                if(MainActivity.musicFlag){
+                if(ModeItemActivity.musicFlag){
                     myBinder.playGameOver();
                 System.out.println("Game Over!");
                 }

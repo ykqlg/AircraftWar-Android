@@ -3,6 +3,7 @@ package com.example.testpro.prop;
 import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.application.GameView;
+import com.example.testpro.application.ModeItemActivity;
 import com.example.testpro.basic.AbstractFlyingObject;
 
 public class BloodProp extends AbstractProp {
@@ -17,7 +18,7 @@ public class BloodProp extends AbstractProp {
 //        }
 //        System.out.println("HpSupply active!");
 
-        if(MainActivity.musicFlag){
+        if(ModeItemActivity.musicFlag){
         GameView.myBinder.playGetSupply();
         }
         abstractAircraft.increaseHp(150);
