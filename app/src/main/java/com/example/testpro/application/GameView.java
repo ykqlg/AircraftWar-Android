@@ -9,7 +9,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -29,7 +28,6 @@ import com.example.testpro.basic.AbstractFlyingObject;
 import com.example.testpro.bullet.BaseBullet;
 import com.example.testpro.bullet.EnemyBullet;
 import com.example.testpro.bullet.HeroBullet;
-import com.example.testpro.enemy_factory.BossFactory;
 import com.example.testpro.enemy_factory.EliteFactory;
 import com.example.testpro.enemy_factory.EnemyFactory;
 import com.example.testpro.enemy_factory.MobFactory;
@@ -37,7 +35,6 @@ import com.example.testpro.prop.AbstractProp;
 import com.example.testpro.prop.BloodProp;
 import com.example.testpro.prop.BombProp;
 import com.example.testpro.prop.BulletProp;
-import com.google.androidgamesdk.GameActivity;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -80,7 +77,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
      * 时间间隔(ms)，控制刷新频率
      */
     public int timeInterval = 20;
-    public int time = 0;
+//    public int time = 0;
     /**
      * 周期（ms)
      * 指示子弹的发射、敌机的产生频率
@@ -92,13 +89,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     protected int bossScoreThreshold = 800 ;
     protected boolean bossDied = true;
     protected boolean bossHappened = false;
-//    protected MusicThread musicThread;
     protected int lastScore;
     protected int cycleTimeFlag=0;
     public static int mode=1;
 
     //音效
-    protected MusicService musicService;
     public static MusicService.MyBinder myBinder;
     private Connect conn;
     private Intent intent;

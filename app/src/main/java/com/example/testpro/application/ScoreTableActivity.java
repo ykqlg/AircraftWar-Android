@@ -87,7 +87,7 @@ public class ScoreTableActivity extends AppCompatActivity {
             try {
                 while ((content = in.readLine()) != null) {
 //                    if(content.equals("yes")){
-//                        System.out.println("login success");
+//                        System.out.println("scoreTable success");
 //                        flag = 1;
 //                        socket.shutdownInput();
 //                        socket.shutdownOutput();
