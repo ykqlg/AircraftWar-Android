@@ -19,7 +19,12 @@ import com.example.testpro.application.Mysql;
 import com.example.testpro.application.RegisterActivity;
 import com.example.testpro.user_dao.User;
 
+import java.net.Socket;
+
 public class MainActivity extends AppCompatActivity {
+
+    private Socket socket;
+
     EditText name,pwd;
     Button btnlogin,btnreg;
     Mysql mysql;
@@ -58,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                         null,null,null);
 
                 int flag = cursor.getCount();                            //查询出来的记录项的条数，若没有该用户则为0条
+
                 if(flag!=0){                                            //若查询出的记录不为0，则进行跳转操作
                     Intent intent = new Intent();
                     intent.setClass(MainActivity.this, ModeItemActivity.class);            //设置页面跳转
