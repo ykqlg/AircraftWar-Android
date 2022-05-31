@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -39,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
     private Socket socket;
     private PrintWriter writer;
     private String content = "";
-    private int flag=0;
 
     protected class NetConn extends Thread{
         @Override
@@ -88,23 +88,18 @@ public class MainActivity extends AppCompatActivity {
                 while ((content = in.readLine()) != null) {
                     if(content.equals("yes")){
                         System.out.println("login success");
-                        flag = 1;
+                        Looper.prepare();
+                        loginSuccess();
+                        Looper.loop();
                         socket.shutdownInput();
                         socket.shutdownOutput();
                         socket.close();
                     }else {
-                        flag = 0;
+                        Looper.prepare();
+                        loginFailed();
+                        Looper.loop();
                     }
                 }
-//                if(content.equals("yes")){
-//                    System.out.println("login success");
-//                    flag = 1;
-//                    socket.shutdownInput();
-//                    socket.shutdownOutput();
-//                    socket.close();
-//                }else {
-//                    flag = 0;
-//                }
             } catch (IOException ex) {
                 ex.printStackTrace();
             }
@@ -113,8 +108,6 @@ public class MainActivity extends AppCompatActivity {
 
     EditText name,pwd;
     Button btnlogin,btnreg;
-//    Mysql mysql;
-    SQLiteDatabase db;
     SharedPreferences sp1,sp2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -150,25 +143,12 @@ public class MainActivity extends AppCompatActivity {
                         writer.println(password);
 
                         //等待服务器传回“是否登录成功”判断
-                        while(true){
-                            new Thread(new Client(socket)).start();
-                        }
+
+                        new Thread(new Client(socket)).start();
+
                     }
                 }.start();
 
-                if(flag == 1){
-                    Intent intent = new Intent();
-                    intent.setClass(MainActivity.this, ModeItemActivity.class);
-//                    SharedPreferences.Editor editor = sp2.edit();
-//                    cursor.moveToFirst();                                   //将光标移动到position为0的位置，默认位置为-1
-//                    String loginname = cursor.getString(0);
-//                    editor.putString("Loginname",loginname);
-//                    editor.commit();                                        //将用户名存到SharedPreferences中
-//                    startActivity(intent);
-                }
-                else{
-                    Toast.makeText(MainActivity.this,"用户名或密码错误！",Toast.LENGTH_LONG).show();             //提示用户信息错误或没有账号
-                }
 
             }
         });
@@ -197,5 +177,17 @@ public class MainActivity extends AppCompatActivity {
         screenWidth = dm.widthPixels;
         //窗口高度
         screenHeight = dm.heightPixels;
+    }
+
+    private void loginSuccess(){
+        Intent intent = new Intent();
+        intent.setClass(MainActivity.this, ModeItemActivity.class);
+        startActivity(intent);
+
+    }
+
+    private void loginFailed() {
+        Toast.makeText(MainActivity.this,"用户名或密码错误！",Toast.LENGTH_LONG).show();             //提示用户信息错误或没有账号
+
     }
 }

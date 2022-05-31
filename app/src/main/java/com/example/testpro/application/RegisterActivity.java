@@ -1,11 +1,9 @@
 package com.example.testpro.application;
 
-import android.content.ContentValues;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -34,6 +32,9 @@ public class RegisterActivity extends AppCompatActivity {
     private PrintWriter writer;
     private String content = "";
     private int flag=0;
+    private String name;
+    private String pwd01;
+    private String pwd02;
 
 
     protected class NetConn extends Thread{
@@ -74,12 +75,20 @@ public class RegisterActivity extends AppCompatActivity {
             try {
                 while ((content = in.readLine()) != null) {
                     if(content.equals("yes")){
-                        System.out.println("login success");
-                        flag = 1;
+                        System.out.println("register success");
+                        Looper.prepare();
+                        userNameEmpty();
+                        Looper.loop();
                         socket.shutdownInput();
                         socket.shutdownOutput();
                         socket.close();
-                    }else {flag = 0;}
+                    }else {
+                        Looper.prepare();
+                        userNameExist();
+                        Looper.loop();
+
+                    }
+
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -105,21 +114,13 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                String name = usename.getText().toString();				//用户名
-                String pwd01 = usepwd.getText().toString();				//密码
-                String pwd02 = usepwd2.getText().toString();			//二次输入的密码
+                name = usename.getText().toString();				//用户名
+                pwd01 = usepwd.getText().toString();				//密码
+                pwd02 = usepwd2.getText().toString();			//二次输入的密码
                 if(name.equals("")||pwd01 .equals("")||pwd02.equals("")){
                     Toast.makeText(RegisterActivity.this, "用户名或密码不能为空!！", Toast.LENGTH_LONG).show();
                 }
                 else{
-//                    Cursor cursor = db.query("logins",new String[]{"usname"},null,null,null,null,null);
-//
-//                    while (cursor.moveToNext()){
-//                        if(cursor.getString(0).equals(name)){
-//                            flag = false;
-//                            break;
-//                        }
-//                    }
                     new Thread(){
                         @Override
                         public void run(){
@@ -128,39 +129,37 @@ public class RegisterActivity extends AppCompatActivity {
                             writer.println(pwd01);
 
                             //等待服务器传回“是否注册成功”判断
-                            while(true){
-                                new Thread(new RegisterActivity.Client(socket)).start();
-                            }
+                            new Thread(new RegisterActivity.Client(socket)).start();
+
                         }
                     }.start();
-                    if(flag==1){                                             //判断用户是否已存在
-                        if (pwd01.equals(pwd02)) {								//判断两次输入的密码是否一致，若一致则继续，不一致则提醒密码不一致
-
-//                            ContentValues cv = new ContentValues();
-//                            cv.put("usname",name);
-//                            cv.put("uspwd",pwd01);
-//                            db.insert("logins",null,cv);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("usname",name);
-                            editor.putString("uspwd",pwd01);
-                            editor.commit();
-                            Intent intent = new Intent();
-                            intent.setClass(RegisterActivity.this, MainActivity.class);      //跳转到登录页面
-                            startActivity(intent);
-                            Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_LONG).show();
-                        }
-                        else {
-                            Toast.makeText(RegisterActivity.this, "密码不一致！", Toast.LENGTH_LONG).show();			//提示密码不一致
-                        }
-                    }
-                    else{
-                        Toast.makeText(RegisterActivity.this, "用户已存在！", Toast.LENGTH_LONG).show();			//提示密码不一致
-                    }
-
                 }
             }
 
 
         });
     }
+
+    private void userNameEmpty(){
+
+        if (pwd01.equals(pwd02)) {		//判断两次输入的密码是否一致，若一致则继续，不一致则提醒密码不一致
+            SharedPreferences.Editor editor = sp.edit();
+            editor.putString("usname",name);
+            editor.putString("uspwd",pwd01);
+            editor.commit();
+            Intent intent = new Intent();
+            intent.setClass(RegisterActivity.this, MainActivity.class);      //跳转到登录页面
+            startActivity(intent);
+
+            Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_LONG).show();
+        }
+        else {
+            Toast.makeText(RegisterActivity.this, "密码不一致！", Toast.LENGTH_LONG).show();			//提示密码不一致
+        }
+    }
+
+    private void userNameExist() {
+        Toast.makeText(RegisterActivity.this, "用户已存在！", Toast.LENGTH_LONG).show();			//提示密码不一致
+    }
+
 }
