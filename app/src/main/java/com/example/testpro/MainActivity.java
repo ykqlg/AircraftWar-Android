@@ -48,11 +48,11 @@ public class MainActivity extends AppCompatActivity {
                 socket = new Socket();
 
 //                //运行时修改成服务器的IP
-//                socket.connect(new InetSocketAddress
-//                        ("10.250.190.13",9999),5000);
-                //郑皓文的电脑ip地址
                 socket.connect(new InetSocketAddress
-                        ("10.250.123.219",9999),5000);
+                        ("10.250.66.62",9999),5000);
+                //郑皓文的电脑ip地址
+//                socket.connect(new InetSocketAddress
+//                        ("10.250.123.219",9999),5000);
 
                 writer = new PrintWriter(new BufferedWriter(
                         new OutputStreamWriter(
