@@ -128,9 +128,8 @@ public class RegisterActivity extends AppCompatActivity {
                             writer.println(pwd01);
 
                             //等待服务器传回“是否注册成功”判断
-                            while(true){
-                                new Thread(new RegisterActivity.Client(socket)).start();
-                            }
+                            new Thread(new RegisterActivity.Client(socket)).start();
+
                         }
                     }.start();
                     if(flag==1){                                             //判断用户是否已存在
