@@ -1,6 +1,5 @@
 package com.example.testpro.application;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -8,8 +7,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.testpro.MainActivity;
@@ -20,7 +17,6 @@ import com.example.testpro.user_dao.UserDaoImpl;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -29,10 +25,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Iterator;
 import java.util.List;
-import java.util.ListIterator;
 
 public class ScoreTableActivity extends AppCompatActivity {
 
@@ -40,36 +33,37 @@ public class ScoreTableActivity extends AppCompatActivity {
 
     private int id;
     private List<User> users;
-    private Socket socket;
-    private PrintWriter writer;
+    private Socket socket = MainActivity.socket;
+    private PrintWriter writer = MainActivity.writer;
     private String content = "";
     private int flag=0;
     private String [] sTableData = new String[3];
 
     private ArrayList<String> strArray = new ArrayList ();
+    private ArrayList<String>tableData = new ArrayList ();
 
-    protected class NetConn extends Thread{
-        @Override
-        public void run(){
-            try{
-                socket = new Socket();
-
-                //郑皓文的电脑ip地址
-                socket.connect(new InetSocketAddress
-                        ("10.250.123.219",9999),5000);
-
-                writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream(),"UTF-8")),true);
-
-
-            }catch(UnknownHostException ex){
-                ex.printStackTrace();
-            }catch(IOException ex){
-                ex.printStackTrace();
-            }
-        }
-    }
+//    protected class NetConn extends Thread{
+//        @Override
+//        public void run(){
+//            try{
+//                socket = new Socket();
+//
+//                //郑皓文的电脑ip地址
+//                socket.connect(new InetSocketAddress
+//                        ("10.250.123.219",9999),5000);
+//
+//                writer = new PrintWriter(new BufferedWriter(
+//                        new OutputStreamWriter(
+//                                socket.getOutputStream(),"UTF-8")),true);
+//
+//
+//            }catch(UnknownHostException ex){
+//                ex.printStackTrace();
+//            }catch(IOException ex){
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
 
     class Client implements Runnable{
         private Socket socket;
@@ -86,14 +80,19 @@ public class ScoreTableActivity extends AppCompatActivity {
         public void run() {
             try {
                 while ((content = in.readLine()) != null) {
-//                    if(content.equals("yes")){
-//                        System.out.println("scoreTable success");
-//                        flag = 1;
-//                        socket.shutdownInput();
-//                        socket.shutdownOutput();
-//                        socket.close();
-//                    }else {flag = 0;}
-                    strArray.add(content);
+                    if(content.equals("yes")){
+                        System.out.println("scoreTable success");
+                        while ((content = in.readLine()) != null) {
+                            tableData.add(content);
+                        }
+//                        showScoreTable();
+
+                    }else {
+//                        flag = 0;
+
+                    }
+//                    strArray.add(content);这是什么？？
+
                 }
             } catch (IOException ex) {
                 ex.printStackTrace();
@@ -104,18 +103,17 @@ public class ScoreTableActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //联网
-        new Thread(new ScoreTableActivity.NetConn()).start();
+//        new Thread(new ScoreTableActivity.NetConn()).start();
         new Thread(){
+//            NetConn netConn = new ScoreTableActivity.NetConn();
             @Override
             public void run(){
                 writer.println("scoreTable");
-                writer.println(GameView.score);
-//                writer.println(pwd01);
+                writer.println(String.valueOf(GameView.score));
+                writer.println("whatever");
 
-                //等待服务器传回“是否注册成功”判断
-                while(true){
-                    new Thread(new ScoreTableActivity.Client(socket)).start();
-                }
+                new Thread(new ScoreTableActivity.Client(socket)).start();
+
             }
         }.start();
 
@@ -125,11 +123,8 @@ public class ScoreTableActivity extends AppCompatActivity {
 
         UserDao userDao=new UserDaoImpl(this);
         users = userDao.getAllUsers();
-        ArrayList<String>tableData = new ArrayList<>();
 
-        for(int i = 0; i<strArray.size();i++){
-            tableData.add(strArray.get(i));
-        }
+
 //        for(User user:users){
 //            String message = user.getUserRank()+" "
 //                    +user.getUserName()+" "
@@ -149,7 +144,7 @@ public class ScoreTableActivity extends AppCompatActivity {
             }
         });
 
-        Button deleteButton = findViewById(R.id.deleteButton);
+        Button deleteButton = (Button) findViewById(R.id.deleteButton);
         deleteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -175,5 +170,16 @@ public class ScoreTableActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    public void showScoreTable(){
+
+        try{
+            socket.shutdownInput();
+            socket.shutdownOutput();
+            socket.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 }

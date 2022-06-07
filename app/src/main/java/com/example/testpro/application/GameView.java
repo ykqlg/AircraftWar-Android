@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.os.IBinder;
+import android.os.Looper;
 import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -36,6 +37,12 @@ import com.example.testpro.prop.BloodProp;
 import com.example.testpro.prop.BombProp;
 import com.example.testpro.prop.BulletProp;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ScheduledExecutorService;
@@ -97,6 +104,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     public static MusicService.MyBinder myBinder;
     private Connect conn;
     private Intent intent;
+
+    //联网
+    private PrintWriter writer = MainActivity.writer;
+    private BufferedReader in = MainActivity.in;
+    private String content = "";
 
     public GameView(Context context) {
 
@@ -205,7 +217,8 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 System.out.println("Game Over!");
                 }
                 gameOverFlag = true;
-                Intent intent = new Intent(this.getContext(),InputActivity.class);
+//                Intent intent = new Intent(this.getContext(),InputActivity.class);
+                Intent intent = new Intent(this.getContext(),ScoreTableActivity.class);
                 this.getContext().startActivity(intent);
                 this.getContext().unbindService(conn);
 
@@ -434,6 +447,66 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         enemyAircrafts.removeIf(AbstractFlyingObject::notValid);
         heroBullets.removeIf(AbstractFlyingObject::notValid);
         props.removeIf(AbstractFlyingObject::notValid);
+    }
+
+    class Client implements Runnable{
+        private Socket socket;
+        private BufferedReader in = null;
+        private String content = "";
+
+        public Client(Socket socket){
+            this.socket = socket;
+            try{
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+
+        @Override
+        public void run() {
+
+            try {
+                while ((content = in.readLine()) != null) {
+                    if(content.equals("yes")){
+                        System.out.println("login success");
+                        Looper.prepare();
+                        Looper.loop();
+                    }else {
+                        Looper.prepare();
+                        Looper.loop();
+                    }
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void synScores(){
+
+        new Thread(){
+            @Override
+            public void run(){
+                while(!gameOverFlag){
+                    writer.println("battle");
+                    writer.println(Integer.toString(score));
+                    try {
+                        while ((content = in.readLine()) != null) {
+                            //获取对方的分数
+                            int score2 = Integer.valueOf(content);
+                            break;
+                        }
+                    } catch (IOException ex) {
+                        ex.printStackTrace();
+                    }
+                }
+
+
+
+            }
+        }.start();
     }
 
 
