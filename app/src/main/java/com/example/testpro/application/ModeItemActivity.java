@@ -45,21 +45,19 @@ public class ModeItemActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getScreenHW();
 
-        Switch soundSwitch = findViewById(R.id.soundSwitch);
+//        Switch soundSwitch = findViewById(R.id.soundSwitch);
 
         Button easyButton = findViewById(R.id.easyButton);
         easyButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(soundSwitch.isChecked()==true){
-                    musicFlag = true;
-                }
+//                if(soundSwitch.isChecked()==true){
+//                    musicFlag = true;
+//                }
                 GameView.mode = 1;
                 Intent intent = new Intent();
                 intent.setClass(ModeItemActivity.this, GameActivity.class);
                 startActivity(intent);
-
-
             }
         });
 
@@ -67,9 +65,9 @@ public class ModeItemActivity extends AppCompatActivity {
         commonButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(soundSwitch.isChecked()==true){
-                    musicFlag = true;
-                }
+//                if(soundSwitch.isChecked()==true){
+//                    musicFlag = true;
+//                }
                 GameView.mode = 2;
 
                 Intent intent = new Intent();
@@ -82,9 +80,9 @@ public class ModeItemActivity extends AppCompatActivity {
         hardButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                if(soundSwitch.isChecked()==true){
-                    musicFlag = true;
-                }
+//                if(soundSwitch.isChecked()==true){
+//                    musicFlag = true;
+//                }
                 GameView.mode = 3;
 
                 Intent intent = new Intent();

@@ -71,7 +71,9 @@ public class RegisterActivity extends AppCompatActivity {
             this.socket = socket;
             try{
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            }catch (IOException ex){ex.printStackTrace();}
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
         }
         @Override
         public void run() {

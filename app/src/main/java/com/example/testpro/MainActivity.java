@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 import com.example.testpro.application.ModeItemActivity;
 import com.example.testpro.application.Mysql;
+import com.example.testpro.application.OnlineOrNotActivity;
 import com.example.testpro.application.RegisterActivity;
 import com.example.testpro.user_dao.User;
 
@@ -182,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void loginSuccess(){
         Intent intent = new Intent();
-        intent.setClass(MainActivity.this, ModeItemActivity.class);
+        intent.setClass(MainActivity.this, OnlineOrNotActivity.class);
         startActivity(intent);
 
     }

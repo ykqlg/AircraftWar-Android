@@ -33,6 +33,7 @@
         <activity android:name=".application.GameActivity" />
         <activity android:name=".application.ModeItemActivity" />
         <activity android:name=".application.RegisterActivity" />
+        <activity android:name=".application.OnlineOrNotActivity" />
 
 
     </application>

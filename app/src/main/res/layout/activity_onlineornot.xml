@@ -3,37 +3,37 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:layout_height="match_parent">
+
+    <Switch
+        android:id="@+id/soundSwitch"
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="155dp"
+        android:layout_marginTop="120dp"
+        android:minHeight="48dp"
+        android:text="音效"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onlineButton" />
 
     <Button
-        android:id="@+id/easyButton"
+        android:id="@+id/standAloneButton"
         android:layout_width="150dp"
         android:layout_height="80dp"
         android:layout_marginStart="120dp"
         android:layout_marginTop="100dp"
-        android:text="简单模式"
+        android:text="单机模式"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/commonButton"
+        android:id="@+id/onlineButton"
         android:layout_width="150dp"
         android:layout_height="80dp"
         android:layout_marginStart="120dp"
-        android:layout_marginTop="60dp"
-        android:text="普通模式"
+        android:layout_marginTop="100dp"
+        android:text="联机模式"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/easyButton" />
-
-    <Button
-        android:id="@+id/hardButton"
-        android:layout_width="150dp"
-        android:layout_height="80dp"
-        android:layout_marginStart="120dp"
-        android:layout_marginTop="60dp"
-        android:text="困难模式"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/commonButton" />
-
+        app:layout_constraintTop_toBottomOf="@+id/standAloneButton" />
 </androidx.constraintlayout.widget.ConstraintLayout>
