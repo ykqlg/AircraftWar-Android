@@ -80,6 +80,10 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     public final ScheduledExecutorService executorService;
     public static int score = 0;
 
+    //对手得分
+    public int opponentScore = 0;
+
+
     /**
      * 时间间隔(ms)，控制刷新频率
      */
@@ -109,6 +113,9 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     private PrintWriter writer = MainActivity.writer;
     private BufferedReader in = MainActivity.in;
     private String content = "";
+
+    //双人对战标志位
+    public static boolean matchFlag;
 
     public GameView(Context context) {
 
@@ -159,8 +166,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
 
-
-
     @Override
     public void run () {
         action();
@@ -201,6 +206,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
             // 后处理
             postProcessAction();
+
+            //同步对手得分
+            if(matchFlag == true){
+                synScores();
+            }
 
             //每个时刻重新绘制界面
             draw();
@@ -485,26 +495,23 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
     public void synScores(){
-
         new Thread(){
             @Override
             public void run(){
                 if(!gameOverFlag){
                     writer.println("battle");
                     writer.println(Integer.toString(score));
+                    writer.println("whatever");
                     try {
                         while ((content = in.readLine()) != null) {
                             //获取对方的分数
-                            int score2 = Integer.valueOf(content);
+                            opponentScore = Integer.valueOf(content);
                             break;
                         }
                     } catch (IOException ex) {
                         ex.printStackTrace();
                     }
                 }
-
-
-
             }
         }.start();
     }
@@ -614,8 +621,13 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 //        g.setFont(new Font("SansSerif", Font.BOLD, 22));
         canvas.drawText("SCORE:" + this.score,x,y,mPaint);
 //        g.drawString("SCORE:" + this.score, x, y);
+        if(matchFlag==true){
+            y = y + 150;
+            canvas.drawText("OPPONENTSCORE:" + opponentScore,x,y,mPaint);
+        }
         y = y + 150;
         canvas.drawText("LIFE:" + this.heroAircraft.getHp(),x,y,mPaint);
+
 //        g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
     }
 

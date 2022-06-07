@@ -116,6 +116,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
                 if(soundSwitch.isChecked()==true){
                     musicFlag = true;
                 }
+                GameView.matchFlag=false;
                 Intent intent = new Intent();
                 intent.setClass(OnlineOrNotActivity.this, ModeItemActivity.class);
                 startActivity(intent);
@@ -129,7 +130,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
                 }
                 Toast.makeText(OnlineOrNotActivity.this,"等待其他玩家加入...",Toast.LENGTH_LONG).show();
 
-                //创建新线程，将用户名和密码传到服务器
+                //创建新线程，将匹配信号传到服务器
                 new Thread(){
                     @Override
                     public void run(){
@@ -137,7 +138,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
                         writer.println("whatever");
                         writer.println("whatever");
 
-                        //等待服务器传回“是否登录成功”判断
+                        //等待服务器传回“是否匹配成功”判断
 
                         new Thread(new Client(socket)).start();
 
@@ -147,9 +148,9 @@ public class OnlineOrNotActivity extends AppCompatActivity {
         });
     }
     private void matchSuccess(){
-        GameView.mode = 3;
+        GameView.matchFlag = true;
         Intent intent = new Intent();
-        intent.setClass(OnlineOrNotActivity.this, GameActivity.class);
+        intent.setClass(OnlineOrNotActivity.this, ModeItemActivity.class);
         startActivity(intent);
 
     }
