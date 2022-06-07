@@ -28,8 +28,8 @@ public class RegisterActivity extends AppCompatActivity {
     EditText usename,usepwd,usepwd2;
     Button submit;
     SharedPreferences sp;
-    private Socket socket;
-    private PrintWriter writer;
+    private Socket socket = MainActivity.socket;
+    private PrintWriter writer = MainActivity.writer;
     private String content = "";
     private int flag=0;
     private String name;
@@ -37,31 +37,28 @@ public class RegisterActivity extends AppCompatActivity {
     private String pwd02;
 
 
-    protected class NetConn extends Thread{
-        @Override
-        public void run(){
-            try{
-                socket = new Socket();
-
-                //刘培源的电脑ip地址
-                socket.connect(new InetSocketAddress
-                        ("10.250.66.62",9999),5000);
-                //郑皓文的电脑ip地址
+//    protected class NetConn extends Thread{
+//        @Override
+//        public void run(){
+//            try{
+//                socket = new Socket();
+//
+//                //郑皓文的电脑ip地址
 //                socket.connect(new InetSocketAddress
 //                        ("10.250.123.219",9999),5000);
-
-                writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream(),"UTF-8")),true);
-
-
-            }catch(UnknownHostException ex){
-                ex.printStackTrace();
-            }catch(IOException ex){
-                ex.printStackTrace();
-            }
-        }
-    }
+//
+//                writer = new PrintWriter(new BufferedWriter(
+//                        new OutputStreamWriter(
+//                                socket.getOutputStream(),"UTF-8")),true);
+//
+//
+//            }catch(UnknownHostException ex){
+//                ex.printStackTrace();
+//            }catch(IOException ex){
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
 
     class Client implements Runnable{
         private Socket socket;
@@ -71,9 +68,7 @@ public class RegisterActivity extends AppCompatActivity {
             this.socket = socket;
             try{
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
+            }catch (IOException ex){ex.printStackTrace();}
         }
         @Override
         public void run() {
@@ -84,14 +79,10 @@ public class RegisterActivity extends AppCompatActivity {
                         Looper.prepare();
                         userNameEmpty();
                         Looper.loop();
-                        socket.shutdownInput();
-                        socket.shutdownOutput();
-                        socket.close();
                     }else {
                         Looper.prepare();
                         userNameExist();
                         Looper.loop();
-
                     }
 
                 }
@@ -104,7 +95,7 @@ public class RegisterActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
 
         //联网
-        new Thread(new RegisterActivity.NetConn()).start();
+//        new Thread(new RegisterActivity.NetConn()).start();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
@@ -161,10 +152,25 @@ public class RegisterActivity extends AppCompatActivity {
         else {
             Toast.makeText(RegisterActivity.this, "密码不一致！", Toast.LENGTH_LONG).show();			//提示密码不一致
         }
+        try{
+            socket.shutdownInput();
+            socket.shutdownOutput();
+            socket.close();
+        }catch(IOException e){
+            e.printStackTrace();
+        }
     }
 
     private void userNameExist() {
         Toast.makeText(RegisterActivity.this, "用户已存在！", Toast.LENGTH_LONG).show();			//提示密码不一致
+
+//        try{
+//            socket.shutdownInput();
+//            socket.shutdownOutput();
+//            socket.close();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 
 }

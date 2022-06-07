@@ -38,8 +38,9 @@ import java.net.UnknownHostException;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Socket socket;
-    private PrintWriter writer;
+    public static Socket socket;
+    public static PrintWriter writer;
+    public static BufferedReader in = null;
     private String content = "";
 
     protected class NetConn extends Thread{
@@ -71,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
     class Client implements Runnable{
         private Socket socket;
-        private BufferedReader in = null;
+//        private BufferedReader in = null;
 
         public Client(Socket socket){
             this.socket = socket;
@@ -93,9 +94,6 @@ public class MainActivity extends AppCompatActivity {
                         Looper.prepare();
                         loginSuccess();
                         Looper.loop();
-                        socket.shutdownInput();
-                        socket.shutdownOutput();
-                        socket.close();
                     }else {
                         Looper.prepare();
                         loginFailed();
@@ -143,9 +141,7 @@ public class MainActivity extends AppCompatActivity {
                         writer.println("login");
                         writer.println(username);
                         writer.println(password);
-
                         //等待服务器传回“是否登录成功”判断
-
                         new Thread(new Client(socket)).start();
 
                     }
@@ -186,10 +182,24 @@ public class MainActivity extends AppCompatActivity {
         intent.setClass(MainActivity.this, OnlineOrNotActivity.class);
         startActivity(intent);
 
+//        try{
+//            socket.shutdownInput();
+//            socket.shutdownOutput();
+//            socket.close();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
+
     }
 
     private void loginFailed() {
         Toast.makeText(MainActivity.this,"用户名或密码错误！",Toast.LENGTH_LONG).show();             //提示用户信息错误或没有账号
-
+//        try{
+//            socket.shutdownInput();
+//            socket.shutdownOutput();
+//            socket.close();
+//        }catch(IOException e){
+//            e.printStackTrace();
+//        }
     }
 }
