@@ -25,36 +25,36 @@ import java.net.UnknownHostException;
 
 public class OnlineOrNotActivity extends AppCompatActivity {
 
-    private Socket socket;
-    private PrintWriter writer;
     private String content = "";
+    private Socket socket = MainActivity.socket;
+    private PrintWriter writer = MainActivity.writer;
 
-    protected class NetConn extends Thread{
-        @Override
-        public void run(){
-            try{
-                socket = new Socket();
-
-//                //运行时修改成服务器的IP
-                //刘培源的电脑ip地址
-                socket.connect(new InetSocketAddress
-                        ("10.250.66.62",9999),5000);
-                //郑皓文的电脑ip地址
+//    protected class NetConn extends Thread{
+//        @Override
+//        public void run(){
+//            try{
+//                socket = new Socket();
+//
+////                //运行时修改成服务器的IP
+//                //刘培源的电脑ip地址
 //                socket.connect(new InetSocketAddress
-//                        ("10.250.123.219",9999),5000);
-
-                writer = new PrintWriter(new BufferedWriter(
-                        new OutputStreamWriter(
-                                socket.getOutputStream(),"UTF-8")),true);
-
-
-            }catch(UnknownHostException ex){
-                ex.printStackTrace();
-            }catch(IOException ex){
-                ex.printStackTrace();
-            }
-        }
-    }
+//                        ("10.250.66.62",9999),5000);
+//                //郑皓文的电脑ip地址
+////                socket.connect(new InetSocketAddress
+////                        ("10.250.123.219",9999),5000);
+//
+//                writer = new PrintWriter(new BufferedWriter(
+//                        new OutputStreamWriter(
+//                                socket.getOutputStream(),"UTF-8")),true);
+//
+//
+//            }catch(UnknownHostException ex){
+//                ex.printStackTrace();
+//            }catch(IOException ex){
+//                ex.printStackTrace();
+//            }
+//        }
+//    }
 
     class Client implements Runnable{
         private Socket socket;
@@ -103,7 +103,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
         setContentView(R.layout.activity_onlineornot);
 
         //联网
-        new Thread(new NetConn()).start();
+//        new Thread(new NetConn()).start();
 
         Switch soundSwitch = findViewById(R.id.soundSwitch);
 

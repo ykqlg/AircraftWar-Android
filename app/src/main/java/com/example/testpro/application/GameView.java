@@ -489,7 +489,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         new Thread(){
             @Override
             public void run(){
-                while(!gameOverFlag){
+                if(!gameOverFlag){
                     writer.println("battle");
                     writer.println(Integer.toString(score));
                     try {
