@@ -30,16 +30,10 @@ import java.util.List;
 public class ScoreTableActivity extends AppCompatActivity {
 
     ListView scoreTable;
-
     private int id;
-    private List<User> users;
     private Socket socket = MainActivity.socket;
     private PrintWriter writer = MainActivity.writer;
     private String content = "";
-    private int flag=0;
-    private String [] sTableData = new String[3];
-
-    private ArrayList<String> strArray = new ArrayList ();
     private ArrayList<String>tableData = new ArrayList ();
 
 
@@ -55,13 +49,6 @@ public class ScoreTableActivity extends AppCompatActivity {
         public void run() {
             try {
                 while ((content = in.readLine()) != null) {
-//                    if(content.equals("yes")){
-//                        System.out.println("scoreTable success");
-//                        while ((content = in.readLine()) != null) {
-//                            System.out.println(content);
-//                            tableData.add(content);
-//                        }
-//                    }else {}
                     tableData.add(content);
 
                 }
@@ -76,6 +63,7 @@ public class ScoreTableActivity extends AppCompatActivity {
         new Thread(){
             @Override
             public void run(){
+                System.out.println("run?");
                 writer.println("scoreTable");
                 writer.println(String.valueOf(GameView.score));
                 writer.println("whatever");
@@ -89,26 +77,13 @@ public class ScoreTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoretable);
         scoreTable=(ListView) findViewById(R.id.scoreTable);
 
-//        UserDao userDao=new UserDaoImpl(this);
-//        users = userDao.getAllUsers();
-
-
-//        for(User user:users){
-//            String message = user.getUserRank()+" "
-//                    +user.getUserName()+" "
-//                    +user.getUserScore()+" "
-//                    +user.getUserTime();
-//            tableData.add(message);
-//        }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(this,android.R.layout.simple_list_item_1,tableData);
         scoreTable.setAdapter(arrayAdapter);
-
 
         scoreTable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 id = (int)l;
-
             }
         });
 
@@ -116,9 +91,6 @@ public class ScoreTableActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-//                    userDao.doDelete(id+1);
-//                    users = userDao.getAllUsers();
-//                tableData.remove(id);
                 for(int i = tableData.size()-1;i>-1;i--){
                     tableData.remove(i);
                 }
@@ -128,19 +100,9 @@ public class ScoreTableActivity extends AppCompatActivity {
                         writer.println("scoreTableDelete");
                         writer.println(String.valueOf(id));
                         writer.println("whatever");
-
                         new Thread(new ScoreTableActivity.Client(socket)).start();
-
                     }
                 }.start();
-//                    for(User user:users){
-//                        String message = user.getUserRank()+" "
-//                                +user.getUserName()+" "
-//                                +user.getUserScore()+" "
-//                                +user.getUserTime();
-//                        tableData.add(message);
-//                    }
-
                 arrayAdapter.notifyDataSetChanged();
 
             }

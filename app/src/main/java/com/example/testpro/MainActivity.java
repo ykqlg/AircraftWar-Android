@@ -43,9 +43,11 @@ public class MainActivity extends AppCompatActivity {
                 //刘培源的电脑ip地址
 //                socket.connect(new InetSocketAddress
 //                        ("10.250.66.62",9999),5000);
-//                郑皓文的电脑ip地址
+//                郑皓文的电脑ip地址 192.168.56.1
+//                socket.connect(new InetSocketAddress
+//                        ("10.250.123.219",9999),5000);
                 socket.connect(new InetSocketAddress
-                        ("10.250.123.219",9999),5000);
+                        ("192.168.56.1",9999),5000);
 
                 writer = new PrintWriter(new BufferedWriter(
                         new OutputStreamWriter(

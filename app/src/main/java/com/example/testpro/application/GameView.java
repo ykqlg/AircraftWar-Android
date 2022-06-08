@@ -210,7 +210,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 //游戏结束音效
                 if(OnlineOrNotActivity.musicFlag){
                     myBinder.playGameOver();
-                System.out.println("Game Over!");
+//                    System.out.println("Game Over!");
                 }
                 gameOverFlag = true;
 //                Intent intent = new Intent(this.getContext(),InputActivity.class);
