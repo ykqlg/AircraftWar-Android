@@ -3,6 +3,7 @@ package com.example.testpro.aircraft;
 import com.example.testpro.MainActivity;
 import com.example.testpro.application.GameView;
 import com.example.testpro.application.ModeItemActivity;
+import com.example.testpro.application.OnlineOrNotActivity;
 import com.example.testpro.bullet.BaseBullet;
 import com.example.testpro.prop.AbstractProp;
 import com.example.testpro.prop_factory.BloodPropFactory;
@@ -60,7 +61,7 @@ public class BossEnemy extends AbstractAircraft {
     @Override
     public void vanish() {
         isValid = false;
-        if(ModeItemActivity.musicFlag) {
+        if(OnlineOrNotActivity.musicFlag) {
             GameView.myBinder.playBGM();
         }
     }

@@ -37,35 +37,10 @@ public class RegisterActivity extends AppCompatActivity {
     private String pwd02;
 
 
-//    protected class NetConn extends Thread{
-//        @Override
-//        public void run(){
-//            try{
-//                socket = new Socket();
-//
-//                //郑皓文的电脑ip地址
-//                socket.connect(new InetSocketAddress
-//                        ("10.250.123.219",9999),5000);
-//
-//                writer = new PrintWriter(new BufferedWriter(
-//                        new OutputStreamWriter(
-//                                socket.getOutputStream(),"UTF-8")),true);
-//
-//
-//            }catch(UnknownHostException ex){
-//                ex.printStackTrace();
-//            }catch(IOException ex){
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
-
     class Client implements Runnable{
-        private Socket socket;
         private BufferedReader in = null;
 
         public Client(Socket socket){
-            this.socket = socket;
             try{
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             }catch (IOException ex){ex.printStackTrace();}
@@ -152,25 +127,12 @@ public class RegisterActivity extends AppCompatActivity {
         else {
             Toast.makeText(RegisterActivity.this, "密码不一致！", Toast.LENGTH_LONG).show();			//提示密码不一致
         }
-        try{
-            socket.shutdownInput();
-            socket.shutdownOutput();
-            socket.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
+
     }
 
     private void userNameExist() {
         Toast.makeText(RegisterActivity.this, "用户已存在！", Toast.LENGTH_LONG).show();			//提示密码不一致
 
-//        try{
-//            socket.shutdownInput();
-//            socket.shutdownOutput();
-//            socket.close();
-//        }catch(IOException e){
-//            e.printStackTrace();
-//        }
     }
 
 }

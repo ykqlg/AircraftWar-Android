@@ -42,36 +42,11 @@ public class ScoreTableActivity extends AppCompatActivity {
     private ArrayList<String> strArray = new ArrayList ();
     private ArrayList<String>tableData = new ArrayList ();
 
-//    protected class NetConn extends Thread{
-//        @Override
-//        public void run(){
-//            try{
-//                socket = new Socket();
-//
-//                //郑皓文的电脑ip地址
-//                socket.connect(new InetSocketAddress
-//                        ("10.250.123.219",9999),5000);
-//
-//                writer = new PrintWriter(new BufferedWriter(
-//                        new OutputStreamWriter(
-//                                socket.getOutputStream(),"UTF-8")),true);
-//
-//
-//            }catch(UnknownHostException ex){
-//                ex.printStackTrace();
-//            }catch(IOException ex){
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
 
     class Client implements Runnable{
-        private Socket socket;
         private BufferedReader in = null;
-        int i = 0;
 
         public Client(Socket socket){
-            this.socket = socket;
             try{
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             }catch (IOException ex){ex.printStackTrace();}
@@ -80,18 +55,14 @@ public class ScoreTableActivity extends AppCompatActivity {
         public void run() {
             try {
                 while ((content = in.readLine()) != null) {
-                    if(content.equals("yes")){
-                        System.out.println("scoreTable success");
-                        while ((content = in.readLine()) != null) {
-                            tableData.add(content);
-                        }
-//                        showScoreTable();
-
-                    }else {
-//                        flag = 0;
-
-                    }
-//                    strArray.add(content);这是什么？？
+//                    if(content.equals("yes")){
+//                        System.out.println("scoreTable success");
+//                        while ((content = in.readLine()) != null) {
+//                            System.out.println(content);
+//                            tableData.add(content);
+//                        }
+//                    }else {}
+                    tableData.add(content);
 
                 }
             } catch (IOException ex) {
@@ -102,10 +73,7 @@ public class ScoreTableActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        //联网
-//        new Thread(new ScoreTableActivity.NetConn()).start();
         new Thread(){
-//            NetConn netConn = new ScoreTableActivity.NetConn();
             @Override
             public void run(){
                 writer.println("scoreTable");
@@ -121,8 +89,8 @@ public class ScoreTableActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scoretable);
         scoreTable=(ListView) findViewById(R.id.scoreTable);
 
-        UserDao userDao=new UserDaoImpl(this);
-        users = userDao.getAllUsers();
+//        UserDao userDao=new UserDaoImpl(this);
+//        users = userDao.getAllUsers();
 
 
 //        for(User user:users){
@@ -148,38 +116,35 @@ public class ScoreTableActivity extends AppCompatActivity {
         deleteButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                try {
-                    userDao.doDelete(id+1);
-                    tableData.remove(id);
-                    users = userDao.getAllUsers();
-                    for(int i = users.size()-1;i>-1;i--){
-                        tableData.remove(i);
-                    }
-                    for(User user:users){
-                        String message = user.getUserRank()+" "
-                                +user.getUserName()+" "
-                                +user.getUserScore()+" "
-                                +user.getUserTime();
-                        tableData.add(message);
-                    }
-
-                    arrayAdapter.notifyDataSetChanged();
-
-                } catch (IOException e) {
-                    e.printStackTrace();
+//                    userDao.doDelete(id+1);
+//                    users = userDao.getAllUsers();
+//                tableData.remove(id);
+                for(int i = tableData.size()-1;i>-1;i--){
+                    tableData.remove(i);
                 }
+                new Thread(){
+                    @Override
+                    public void run(){
+                        writer.println("scoreTableDelete");
+                        writer.println(String.valueOf(id));
+                        writer.println("whatever");
+
+                        new Thread(new ScoreTableActivity.Client(socket)).start();
+
+                    }
+                }.start();
+//                    for(User user:users){
+//                        String message = user.getUserRank()+" "
+//                                +user.getUserName()+" "
+//                                +user.getUserScore()+" "
+//                                +user.getUserTime();
+//                        tableData.add(message);
+//                    }
+
+                arrayAdapter.notifyDataSetChanged();
+
             }
         });
     }
 
-    public void showScoreTable(){
-
-        try{
-            socket.shutdownInput();
-            socket.shutdownOutput();
-            socket.close();
-        }catch(IOException e){
-            e.printStackTrace();
-        }
-    }
 }

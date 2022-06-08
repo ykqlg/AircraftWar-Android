@@ -43,8 +43,6 @@ public class HeroAircraft extends AbstractAircraft {
                             MainActivity.screenHeight - ImageManager.HERO_IMAGE.getHeight() ,
                             0,-7,1000);
 
-//                    Strategy heroSingleType = new HeroDoubleType();
-//                    heroAircraft.setStrategy(heroSingleType);
                 }
             }
         }
@@ -52,20 +50,11 @@ public class HeroAircraft extends AbstractAircraft {
     }
 
 
-
     @Override
     public void forward() {
         // 英雄机由鼠标控制，不通过forward函数移动
     }
 
-
-
-//    @Override
-//    public List<BaseBullet> executeStrategy(){
-//        return this.strategy.shootType(this.getLocationX(),this.getLocationY(),this.getSpeedY());
-//    }
-//    @Override
-//    public List<AbstractProp> leave(){return new LinkedList<>();};
 
     @Override
     public int getDirection() {

@@ -4,6 +4,7 @@ import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.application.GameView;
 import com.example.testpro.application.ModeItemActivity;
+import com.example.testpro.application.OnlineOrNotActivity;
 import com.example.testpro.basic.AbstractFlyingObject;
 
 public class BloodProp extends AbstractProp {
@@ -13,13 +14,8 @@ public class BloodProp extends AbstractProp {
     }
     @Override
     public void influence(AbstractAircraft abstractAircraft){
-//        if(Main.musicFlag){
-//            new MusicThread("src/videos/get_supply.wav").start();
-//        }
-//        System.out.println("HpSupply active!");
-
-        if(ModeItemActivity.musicFlag){
-        GameView.myBinder.playGetSupply();
+        if(OnlineOrNotActivity.musicFlag){
+            GameView.myBinder.playGetSupply();
         }
         abstractAircraft.increaseHp(150);
     }

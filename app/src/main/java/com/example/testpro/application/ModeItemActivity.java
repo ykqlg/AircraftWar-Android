@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
@@ -13,12 +14,22 @@ import android.widget.Switch;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
+import com.example.testpro.MainActivity;
 import com.example.testpro.R;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
 
 public class ModeItemActivity extends AppCompatActivity {
     public static boolean musicFlag = false;
     public static int screenWidth;
     public static int screenHeight;
+    private String content = "";
+    private Socket socket = MainActivity.socket;
+    private PrintWriter writer = MainActivity.writer;
 
     private  final int REQUEST_EXTERNAL_STORAGE = 1;
     private  String[] PERMISSIONS_STORAGE = {
@@ -55,6 +66,14 @@ public class ModeItemActivity extends AppCompatActivity {
 //                    musicFlag = true;
 //                }
                 GameView.mode = 1;
+                new Thread(){
+                    @Override
+                    public void run(){
+                        writer.println("modeItemChoose");
+                        writer.println(Integer.toString(1));
+                        writer.println("whatever");
+                    }
+                }.start();
                 Intent intent = new Intent();
                 intent.setClass(ModeItemActivity.this, GameActivity.class);
                 startActivity(intent);
@@ -69,7 +88,14 @@ public class ModeItemActivity extends AppCompatActivity {
 //                    musicFlag = true;
 //                }
                 GameView.mode = 2;
-
+                new Thread(){
+                    @Override
+                    public void run(){
+                        writer.println("modeItemChoose");
+                        writer.println(Integer.toString(2));
+                        writer.println("whatever");
+                    }
+                }.start();
                 Intent intent = new Intent();
                 intent.setClass(ModeItemActivity.this, GameActivity.class);
                 startActivity(intent);
@@ -84,7 +110,14 @@ public class ModeItemActivity extends AppCompatActivity {
 //                    musicFlag = true;
 //                }
                 GameView.mode = 3;
-
+                new Thread(){
+                    @Override
+                    public void run(){
+                        writer.println("modeItemChoose");
+                        writer.println(Integer.toString(3));
+                        writer.println("whatever");
+                    }
+                }.start();
                 Intent intent = new Intent();
                 intent.setClass(ModeItemActivity.this, GameActivity.class);
                 startActivity(intent);

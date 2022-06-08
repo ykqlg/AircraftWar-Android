@@ -4,6 +4,7 @@ import com.example.testpro.MainActivity;
 import com.example.testpro.aircraft.AbstractAircraft;
 import com.example.testpro.application.GameView;
 import com.example.testpro.application.ModeItemActivity;
+import com.example.testpro.application.OnlineOrNotActivity;
 import com.example.testpro.basic.AbstractFlyingObject;
 import com.example.testpro.strategy.DirectBullet;
 import com.example.testpro.strategy.ScatterBullet;
@@ -20,12 +21,8 @@ public class BulletProp extends AbstractProp{
 
     @Override
     public void influence(AbstractAircraft abstractAircraft) throws InterruptedException {
-//        if(Main.musicFlag){
-//            new MusicThread("src/videos/bullet.wav").start();
-//        }
-//        System.out.println("FireSupply active!");
-        if(ModeItemActivity.musicFlag){
-        GameView.myBinder.playBullet();
+        if(OnlineOrNotActivity.musicFlag){
+            GameView.myBinder.playBullet();
         }
         //如果在火力道具有效期间，每触碰一次火力道具，子弹数目加1，有上限
         if(abstractAircraft.getShootNum()<maxShootNum){

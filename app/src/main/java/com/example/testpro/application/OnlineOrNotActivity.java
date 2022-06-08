@@ -28,40 +28,12 @@ public class OnlineOrNotActivity extends AppCompatActivity {
     private String content = "";
     private Socket socket = MainActivity.socket;
     private PrintWriter writer = MainActivity.writer;
+    public static boolean battleFlag = false;
 
-//    protected class NetConn extends Thread{
-//        @Override
-//        public void run(){
-//            try{
-//                socket = new Socket();
-//
-////                //运行时修改成服务器的IP
-//                //刘培源的电脑ip地址
-//                socket.connect(new InetSocketAddress
-//                        ("10.250.66.62",9999),5000);
-//                //郑皓文的电脑ip地址
-////                socket.connect(new InetSocketAddress
-////                        ("10.250.123.219",9999),5000);
-//
-//                writer = new PrintWriter(new BufferedWriter(
-//                        new OutputStreamWriter(
-//                                socket.getOutputStream(),"UTF-8")),true);
-//
-//
-//            }catch(UnknownHostException ex){
-//                ex.printStackTrace();
-//            }catch(IOException ex){
-//                ex.printStackTrace();
-//            }
-//        }
-//    }
 
     class Client implements Runnable{
-        private Socket socket;
         private BufferedReader in = null;
-
         public Client(Socket socket){
-            this.socket = socket;
             try{
                 in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             }catch (IOException ex){
@@ -79,9 +51,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
                         Looper.prepare();
                         matchSuccess();//匹配成功
                         Looper.loop();
-                        socket.shutdownInput();
-                        socket.shutdownOutput();
-                        socket.close();
+
                     }else {
                         Looper.prepare();
                         matchFailed();//匹配失败
@@ -102,11 +72,7 @@ public class OnlineOrNotActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_onlineornot);
 
-        //联网
-//        new Thread(new NetConn()).start();
-
         Switch soundSwitch = findViewById(R.id.soundSwitch);
-
         Button standAloneButton = findViewById(R.id.standAloneButton);
         Button onlineButton = findViewById(R.id.onlineButton);
 
@@ -129,15 +95,12 @@ public class OnlineOrNotActivity extends AppCompatActivity {
                 }
                 Toast.makeText(OnlineOrNotActivity.this,"等待其他玩家加入...",Toast.LENGTH_LONG).show();
 
-                //创建新线程，将用户名和密码传到服务器
                 new Thread(){
                     @Override
                     public void run(){
                         writer.println("match");
                         writer.println("whatever");
                         writer.println("whatever");
-
-                        //等待服务器传回“是否登录成功”判断
 
                         new Thread(new Client(socket)).start();
 
@@ -146,8 +109,11 @@ public class OnlineOrNotActivity extends AppCompatActivity {
             }
         });
     }
+
+
     private void matchSuccess(){
         GameView.mode = 3;
+        battleFlag = true;
         Intent intent = new Intent();
         intent.setClass(OnlineOrNotActivity.this, GameActivity.class);
         startActivity(intent);

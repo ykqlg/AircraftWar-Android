@@ -79,6 +79,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
      */
     public final ScheduledExecutorService executorService;
     public static int score = 0;
+    public int battleScore = 0;
 
     /**
      * 时间间隔(ms)，控制刷新频率
@@ -106,6 +107,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     private Intent intent;
 
     //联网
+    private Socket socket = MainActivity.socket;
     private PrintWriter writer = MainActivity.writer;
     private BufferedReader in = MainActivity.in;
     private String content = "";
@@ -132,9 +134,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         enemyBullets = new LinkedList<>();
         props = new LinkedList<>();
 
-        //音效
-
-        Log.i("music demo","bind service");
+        //音效服务
         conn = new Connect();
         intent = new Intent(this.getContext(),MusicService.class);
         this.getContext().bindService(intent,conn, Context.BIND_AUTO_CREATE);
@@ -144,21 +144,18 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
         @Override
         public void onServiceConnected(ComponentName name, IBinder service){
-            Log.i("music demo","Service Connnected!!!!!!");
+//            Log.i("music demo","Service Connnected!!!!!!");
             myBinder = (MusicService.MyBinder)service;
-            if(ModeItemActivity.musicFlag){
+            if(OnlineOrNotActivity.musicFlag){
                 myBinder.playBGM();
-//                myBinder.playBossMusic();
             }
         }
 
         @Override
         public void onServiceDisconnected(ComponentName componentName) {
-            Log.i("music demo","Service Disconnnected!!!!!!");
+//            Log.i("music demo","Service Disconnnected!!!!!!");
         }
     }
-
-
 
 
     @Override
@@ -205,14 +202,13 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
             //每个时刻重新绘制界面
             draw();
 
-
             // 游戏结束检查
             if (heroAircraft.getHp() <= 0) {
                 // 游戏结束
                 executorService.shutdown();
 
                 //游戏结束音效
-                if(ModeItemActivity.musicFlag){
+                if(OnlineOrNotActivity.musicFlag){
                     myBinder.playGameOver();
                 System.out.println("Game Over!");
                 }
@@ -449,65 +445,7 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         props.removeIf(AbstractFlyingObject::notValid);
     }
 
-    class Client implements Runnable{
-        private Socket socket;
-        private BufferedReader in = null;
-        private String content = "";
 
-        public Client(Socket socket){
-            this.socket = socket;
-            try{
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void run() {
-
-            try {
-                while ((content = in.readLine()) != null) {
-                    if(content.equals("yes")){
-                        System.out.println("login success");
-                        Looper.prepare();
-                        Looper.loop();
-                    }else {
-                        Looper.prepare();
-                        Looper.loop();
-                    }
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
-
-    public void synScores(){
-
-        new Thread(){
-            @Override
-            public void run(){
-                if(!gameOverFlag){
-                    writer.println("battle");
-                    writer.println(Integer.toString(score));
-                    try {
-                        while ((content = in.readLine()) != null) {
-                            //获取对方的分数
-                            int score2 = Integer.valueOf(content);
-                            break;
-                        }
-                    } catch (IOException ex) {
-                        ex.printStackTrace();
-                    }
-                }
-
-
-
-            }
-        }.start();
-    }
 
 
 
@@ -568,7 +506,11 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
                 heroAircraft.getLocationY()-ImageManager.HERO_IMAGE.getHeight()/2,mPaint);
 
         //绘制得分和生命值
-                paintScoreAndLife(canvas);
+        paintScoreAndLife(canvas);
+        //如果进入对战模式，则要绘制对手分数
+        if(OnlineOrNotActivity.battleFlag){
+            paintBattleScore(canvas);
+        }
 
         //通过unlockCanvasAndPost(mCanvas)方法对画布内容进行提交
         mSurfaceHolder.unlockCanvasAndPost(canvas);
@@ -611,13 +553,53 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         mPaint.setColor(Color.RED);
         mPaint.setTextSize((float) 100.0);
         mPaint.setFakeBoldText(true);
-//        g.setFont(new Font("SansSerif", Font.BOLD, 22));
         canvas.drawText("SCORE:" + this.score,x,y,mPaint);
-//        g.drawString("SCORE:" + this.score, x, y);
         y = y + 150;
         canvas.drawText("LIFE:" + this.heroAircraft.getHp(),x,y,mPaint);
-//        g.drawString("LIFE:" + this.heroAircraft.getHp(), x, y);
     }
+
+    class Client implements Runnable{
+        private BufferedReader in = null;
+        public Client(Socket socket){
+            try{
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        @Override
+        public void run() {
+            try {
+                while ((content = in.readLine()) != null) {
+                    battleScore = Integer.valueOf(content);
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    //绘制对手分数
+    private void paintBattleScore(Canvas canvas) {
+        new Thread(){
+            @Override
+            public void run(){
+                if(!gameOverFlag){
+                    writer.println("battle");
+                    writer.println(Integer.toString(score));
+                    new Thread(new GameView.Client(socket)).start();
+                }
+            }
+        }.start();
+
+        int x = 900;
+        int y = 300;
+        mPaint.setColor(Color.BLUE);
+        mPaint.setTextSize((float) 100.0);
+        mPaint.setFakeBoldText(true);
+        canvas.drawText("SCORE:" + battleScore,x,y,mPaint);
+    }
+
 
 
     @Override
