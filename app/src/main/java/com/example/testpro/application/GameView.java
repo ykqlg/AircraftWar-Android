@@ -109,7 +109,6 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     //联网
     private Socket socket = MainActivity.socket;
     private PrintWriter writer = MainActivity.writer;
-    private BufferedReader in = MainActivity.in;
     private String content = "";
 
     public GameView(Context context) {
@@ -198,6 +197,9 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
 
             // 后处理
             postProcessAction();
+
+            //同步对手得分
+            synBattleScore();
 
             //每个时刻重新绘制界面
             draw();
@@ -446,6 +448,56 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
     }
 
 
+    class Client implements Runnable{
+        private BufferedReader in = null;
+//        private boolean rFlag = false;
+        private String[] arr = new String[2];
+        private int n;
+        public Client(Socket socket){
+            try{
+                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            }catch (IOException ex){
+                ex.printStackTrace();
+            }
+        }
+        @Override
+        public void run() {
+            try {
+                while ((arr[0] = in.readLine()) != null) {
+                    arr[1] =in.readLine();
+                    System.out.println("arr[0]:"+arr[0]);
+                    System.out.println("arr[1]:"+arr[1]);
+//                    System.out.println("in:"+in.readLine());
+
+                    if(arr[0].equals("battleyes")) {
+                        battleScore = Integer.parseInt(arr[1]);
+//
+//                        while ((content = in.readLine()) != null) {
+//                            battleScore = Integer.parseInt(content);
+//                            break;
+//                        }
+                    }
+                    break;
+                }
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    }
+
+    public void synBattleScore(){
+        new Thread(){
+            @Override
+            public void run(){
+                if(!gameOverFlag){
+                    writer.println("battle");
+                    writer.println(Integer.toString(score));
+                    writer.println("whatever");
+                    new Thread(new GameView.Client(socket)).start();
+                }
+            }
+        }.start();
+    }
 
 
 
@@ -558,43 +610,13 @@ public abstract class GameView extends SurfaceView implements SurfaceHolder.Call
         canvas.drawText("LIFE:" + this.heroAircraft.getHp(),x,y,mPaint);
     }
 
-    class Client implements Runnable{
-        private BufferedReader in = null;
-        public Client(Socket socket){
-            try{
-                in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-            }catch (IOException ex){
-                ex.printStackTrace();
-            }
-        }
-        @Override
-        public void run() {
-            try {
-                while ((content = in.readLine()) != null) {
-                    battleScore = Integer.valueOf(content);
-                }
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-    }
+
 
     //绘制对手分数
     private void paintBattleScore(Canvas canvas) {
-        new Thread(){
-            @Override
-            public void run(){
-                if(!gameOverFlag){
-                    writer.println("battle");
-                    writer.println(Integer.toString(score));
-                    new Thread(new GameView.Client(socket)).start();
-                }
-            }
-        }.start();
-
         int x = 900;
         int y = 300;
-        mPaint.setColor(Color.BLUE);
+        mPaint.setColor(Color.YELLOW);
         mPaint.setTextSize((float) 100.0);
         mPaint.setFakeBoldText(true);
         canvas.drawText("SCORE:" + battleScore,x,y,mPaint);

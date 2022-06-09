@@ -49,6 +49,11 @@ public class ScoreTableActivity extends AppCompatActivity {
         public void run() {
             try {
                 while ((content = in.readLine()) != null) {
+//                    if(content.equals("scoretableyes")) {
+//                        while ((content = in.readLine()) != null) {
+//                            tableData.add(content);
+//                        }
+//                    }
                     tableData.add(content);
 
                 }
@@ -63,10 +68,11 @@ public class ScoreTableActivity extends AppCompatActivity {
         new Thread(){
             @Override
             public void run(){
-                System.out.println("run?");
+//                System.out.println("run?");
                 writer.println("scoreTable");
                 writer.println(String.valueOf(GameView.score));
                 writer.println("whatever");
+
 
                 new Thread(new ScoreTableActivity.Client(socket)).start();
 
